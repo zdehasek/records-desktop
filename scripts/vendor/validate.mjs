@@ -253,13 +253,15 @@ function hasDependency(machos, file, expected) {
     .dependencies.some((dependency) => dependency === expected)
 }
 
-function validateLicenses(stage) {
+export function validateLicenses(stage) {
   for (const component of lock.components) {
     const directory = path.join(stage, "licenses", component.name)
     if (!fs.existsSync(directory))
       fail(`staged license directory is missing: ${component.name}`)
     const actual = fs.readdirSync(directory).sort()
-    const expected = component.licenseFiles.map(path.basename).sort()
+    const expected = component.licenseFiles
+      .map((file) => path.basename(file))
+      .sort()
     if (actual.join("\n") !== expected.join("\n"))
       fail(
         `${component.name}: expected exact license files ${expected.join(", ")}; got ${actual.join(", ")}`

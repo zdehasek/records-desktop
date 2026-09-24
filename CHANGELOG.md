@@ -4,6 +4,11 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.7 - 2026-09-25
+
+- Fix staged vendor license validation and cover it with a Linux regression
+  test.
+
 ## 0.1.6 - 2026-09-24
 
 - Remove Perl's development-only static archive from the packaged runtime.
