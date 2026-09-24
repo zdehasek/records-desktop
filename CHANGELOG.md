@@ -4,6 +4,11 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.4 - 2026-09-24
+
+- Fix the static ImageMagick WebP link by including libwebp's private
+  libsharpyuv dependency.
+
 ## 0.1.3 - 2026-09-24
 
 - Fix native macOS libheif configuration by excluding its unused TIFF helper

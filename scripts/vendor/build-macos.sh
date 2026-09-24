@@ -125,7 +125,7 @@ cmake_build libheif ON \
   -DWITH_GDK_PIXBUF=OFF -DWITH_EXAMPLES=OFF -DBUILD_TESTING=OFF
 
 IM=$(extract_source imagemagick)
-(cd "$IM" && ./configure --prefix="$PREFIX" --disable-shared --enable-static --without-modules --without-x --without-gslib --without-djvu --without-fftw --without-fontconfig --without-freetype --without-lcms --without-openjp2 --without-raw --without-xml && make -j"$JOBS" && make install)
+(cd "$IM" && WEBP_CFLAGS="$(pkg-config --cflags libwebp)" WEBP_LIBS="$(pkg-config --static --libs libwebp)" ./configure --prefix="$PREFIX" --disable-shared --enable-static --without-modules --without-x --without-gslib --without-djvu --without-fftw --without-fontconfig --without-freetype --without-lcms --without-openjp2 --without-raw --without-xml && make -j"$JOBS" && make install)
 
 FFMPEG=$(extract_source ffmpeg)
 (cd "$FFMPEG" && ./configure --prefix="$PREFIX" --pkg-config-flags=--static --extra-cflags="-I$PREFIX/include" --extra-ldflags="-L$PREFIX/lib" --enable-gpl --enable-libx264 --enable-videotoolbox --disable-shared --enable-static --disable-doc --disable-debug --disable-ffplay --disable-network && make -j"$JOBS" && make install)
