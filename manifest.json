@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "io.github.zdehasek.records",
   "name": "Records",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "zdehasek",
   "license": "MIT",
   "description": "Private local-first photos and videos for Omarchy",

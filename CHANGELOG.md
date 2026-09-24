@@ -4,6 +4,12 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.5 - 2026-09-24
+
+- Expose libsharpyuv in the static libwebp package metadata used by
+  ImageMagick, disable unneeded WebP utilities, and retry transient source
+  download failures.
+
 ## 0.1.4 - 2026-09-24
 
 - Fix the static ImageMagick WebP link by including libwebp's private

@@ -101,7 +101,9 @@ X264=$(extract_source x264)
 cmake_static libjpeg-turbo -DENABLE_SHARED=OFF -DWITH_TURBOJPEG=OFF -DWITH_TESTS=OFF
 cmake_static libpng -DPNG_SHARED=OFF -DPNG_STATIC=ON -DPNG_TESTS=OFF -DPNG_TOOLS=OFF
 cmake_static libtiff -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dtiff-docs=OFF -Djpeg=ON -Djbig=OFF -Dlerc=OFF -Dlzma=OFF -Dwebp=OFF -Dzstd=OFF
-cmake_static libwebp -DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_EXTRAS=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=OFF
+cmake_static libwebp -DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_EXTRAS=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=OFF
+sed -i '' 's/^Requires\.private: libsharpyuv$/Requires: libsharpyuv/' "$PREFIX/lib/pkgconfig/libwebp.pc"
+[[ $(pkg-config --libs libwebp) == *'-lsharpyuv'* ]] || { echo "libwebp pkg-config metadata omits libsharpyuv" >&2; exit 1; }
 cmake_build libde265 ON -DENABLE_SDL=OFF -DENABLE_DEC265=OFF -DENABLE_ENCODER=OFF
 
 DAV1D=$(extract_source dav1d)
@@ -125,7 +127,7 @@ cmake_build libheif ON \
   -DWITH_GDK_PIXBUF=OFF -DWITH_EXAMPLES=OFF -DBUILD_TESTING=OFF
 
 IM=$(extract_source imagemagick)
-(cd "$IM" && WEBP_CFLAGS="$(pkg-config --cflags libwebp)" WEBP_LIBS="$(pkg-config --static --libs libwebp)" ./configure --prefix="$PREFIX" --disable-shared --enable-static --without-modules --without-x --without-gslib --without-djvu --without-fftw --without-fontconfig --without-freetype --without-lcms --without-openjp2 --without-raw --without-xml && make -j"$JOBS" && make install)
+(cd "$IM" && ./configure --prefix="$PREFIX" --disable-shared --enable-static --without-modules --without-x --without-gslib --without-djvu --without-fftw --without-fontconfig --without-freetype --without-lcms --without-openjp2 --without-raw --without-xml && make -j"$JOBS" && make install)
 
 FFMPEG=$(extract_source ffmpeg)
 (cd "$FFMPEG" && ./configure --prefix="$PREFIX" --pkg-config-flags=--static --extra-cflags="-I$PREFIX/include" --extra-ldflags="-L$PREFIX/lib" --enable-gpl --enable-libx264 --enable-videotoolbox --disable-shared --enable-static --disable-doc --disable-debug --disable-ffplay --disable-network && make -j"$JOBS" && make install)

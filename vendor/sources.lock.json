@@ -72,7 +72,11 @@
       "directory": "libwebp-1.6.0",
       "license": "BSD-3-Clause",
       "licenseFiles": ["COPYING"],
-      "buildOptions": ["BUILD_SHARED_LIBS=OFF", "WEBP_BUILD_EXTRAS=OFF"]
+      "buildOptions": [
+        "BUILD_SHARED_LIBS=OFF",
+        "WEBP_BUILD_EXTRAS=OFF",
+        "WEBP_BUILD_GIF2WEBP=OFF"
+      ]
     },
     {
       "name": "libde265",
