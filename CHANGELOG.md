@@ -4,6 +4,10 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.6 - 2026-09-24
+
+- Remove Perl's development-only static archive from the packaged runtime.
+
 ## 0.1.5 - 2026-09-24
 
 - Expose libsharpyuv in the static libwebp package metadata used by

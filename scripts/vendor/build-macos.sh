@@ -147,6 +147,9 @@ rewrite_matching_dependency "$STAGE/bin/magick" 'libheif*.dylib' @executable_pat
 install_name_tool -add_rpath @loader_path "$STAGE/lib/libheif.dylib"
 install_name_tool -add_rpath @executable_path/../lib "$STAGE/bin/magick"
 cp -R "$PREFIX/perl" "$STAGE/perl"
+PERL_ARCHIVE=$(find "$STAGE/perl" -type f -name libperl.a -print)
+[[ -n $PERL_ARCHIVE && $PERL_ARCHIVE != *$'\n'* ]] || { echo "expected one staged libperl.a" >&2; exit 1; }
+rm "$PERL_ARCHIVE"
 cp "$EXIFTOOL/exiftool" "$STAGE/exiftool/"
 cp -R "$EXIFTOOL/lib" "$STAGE/exiftool/lib"
 cp "$ROOT/scripts/vendor/policy.xml" "$STAGE/etc/ImageMagick-7/policy.xml"
