@@ -1,0 +1,1 @@
+function n(e,r){if(Array.isArray(e)){if(!Array.isArray(r)||e.length!==r.length)return!1;for(let t=0;t<e.length;t++)if(!n(e[t],r[t]))return!1;return!0}if(typeof e=="object"&&e!==null&&r!==null){if(typeof r!="object"||Object.keys(e).length!==Object.keys(r).length)return!1;for(const t in e)if(!n(e[t],r[t]))return!1;return!0}return e===r}export{n as deepEqual};

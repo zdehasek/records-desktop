@@ -1,0 +1,1 @@
+import{ValidationError as a}from"../error/validation_error-CJR1o0RA.js";function o(e){const n=e.key,t=e.value;return t?[new a(n,t,"constants have been deprecated as of v8")]:[]}export{o as validateConstants};

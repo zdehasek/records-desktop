@@ -1,0 +1,1 @@
+function o(n){return n instanceof Number||n instanceof String||n instanceof Boolean?n.valueOf():n}function e(n){if(Array.isArray(n))return n.map(e);if(n instanceof Object&&!(n instanceof Number||n instanceof String||n instanceof Boolean)){const r={};for(const t in n)r[t]=e(n[t]);return r}return o(n)}export{e as deepUnbundle,o as unbundle};

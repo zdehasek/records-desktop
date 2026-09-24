@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.zdehasek.records",
+  "name": "Records",
+  "version": "0.1.0",
+  "author": "zdehasek",
+  "license": "MIT",
+  "description": "Private local-first photos and videos for Omarchy",
+  "kinds": ["service", "bar-widget"],
+  "entryPoints": {
+    "service": "Service.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Records",
+    "description": "Open Records and browse your photos and videos",
+    "category": "Productivity",
+    "allowMultiple": false,
+    "defaultSection": "center"
+  }
+}

@@ -1,0 +1,1 @@
+import o from"../vector-B_puz32Y.js";class c extends o{constructor(t,e,r){super(t,e.getBuffer(),r),this.dataVector=e}getValueFromBuffer(t){return this.dataVector.get(t)}}export{c as BooleanFlatVector};

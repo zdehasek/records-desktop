@@ -1,0 +1,1 @@
+function n({messages:e}){const o=[...e].filter(t=>["photo","video"].includes(String((t==null?void 0:t.message_type)||"").toLowerCase())).sort((t,i)=>t.created_at.localeCompare(i.created_at));return[{id:"media",title:"Photos and videos",items:o,count:o.length}]}export{n as buildDaySections};

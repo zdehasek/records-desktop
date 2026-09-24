@@ -1,0 +1,79 @@
+{
+  "name": "records-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local photo and video records for Omarchy",
+  "author": "zdehasek",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zdehasek/records-desktop.git"
+  },
+  "homepage": "https://github.com/zdehasek/records-desktop#readme",
+  "bugs": {
+    "url": "https://github.com/zdehasek/records-desktop/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "npm@10.9.8",
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:runtime-vendor && vite build",
+    "build:runtime-vendor": "/usr/bin/node scripts/build-runtime-vendor.mjs",
+    "generate:notices": "/usr/bin/node scripts/generate-third-party-notices.mjs",
+    "generate:preview": "/usr/bin/node scripts/capture-preview.mjs",
+    "dev": "/usr/bin/node scripts/dev.mjs",
+    "dev:clean": "/usr/bin/node scripts/dev.mjs --clean",
+    "dev:frontend": "vite",
+    "test": "/usr/bin/node --test tests/node/*.test.js",
+    "test:coverage": "c8 --all --src runtime --include 'runtime/**/*.js' --exclude 'runtime/vendor/**' --exclude 'tests/**' --check-coverage --statements 80 --branches 80 --functions 80 --lines 80 --reporter=json --reporter=text /usr/bin/node --test tests/node/*.test.js",
+    "test:coverage:report": "npm run test:coverage && npm run report:crap",
+    "test:browser": "playwright test tests/browser",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "lint:unused": "eslint . --max-warnings 0 --rule 'unused-imports/no-unused-imports:error' --rule 'unused-imports/no-unused-vars:error'",
+    "lint:imports": "/usr/bin/node scripts/check-relative-imports.mjs",
+    "report:css-candidates": "/usr/bin/node scripts/report-unused-css.mjs",
+    "lint:css:unused": "npm run report:css-candidates",
+    "lint:all": "npm run lint && npm run lint:imports && npm run lint:unused",
+    "deadcode": "knip",
+    "report:crap": "/usr/bin/node scripts/report-crap.mjs",
+    "validate": "/usr/bin/node scripts/validate-plugin.mjs",
+    "check:release": "/usr/bin/node scripts/check-release-tree.mjs",
+    "check:bundle": "/usr/bin/node scripts/check-bundle.mjs",
+    "check:static": "npm run format:check && npm run lint:all && npm run deadcode",
+    "check": "npm run check:static && npm test",
+    "test:all": "npm run check:static && npm run test:coverage:report && npm run test:browser && npm run check:bundle && npm run check:release && npm run validate"
+  },
+  "dependencies": {
+    "@fontsource/caveat": "^5.2.8",
+    "@fontsource/inter": "^5.2.8",
+    "@protomaps/basemaps": "^5.7.0",
+    "@tanstack/solid-virtual": "^3.13.18",
+    "chokidar": "^5.0.0",
+    "maplibre-gl": "6.11.2",
+    "pmtiles": "^4.4.0",
+    "solid-js": "^1.9.11",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.49.1",
+    "c8": "^12.0.0",
+    "esbuild": "^0.25.12",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import-x": "^4.17.1",
+    "eslint-plugin-solid": "^0.14.5",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "globals": "^16.5.0",
+    "knip": "^6.33.0",
+    "prettier": "^3.8.1",
+    "purgecss": "^8.0.0",
+    "vite": "^6.0.0",
+    "vite-plugin-solid": "^2.11.10"
+  }
+}

@@ -1,0 +1,1 @@
+var e=class i{constructor(t,n=[]){this.parent=t,this.bindings={};for(const[r,s]of n)this.bindings[r]=s}concat(t){return new i(this,t)}get(t){if(this.bindings[t])return this.bindings[t];if(this.parent)return this.parent.get(t);throw new Error(`${t} not found in scope.`)}has(t){return this.bindings[t]?!0:this.parent?this.parent.has(t):!1}};export{e as Scope};

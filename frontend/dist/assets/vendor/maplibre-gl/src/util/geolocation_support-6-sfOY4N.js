@@ -1,0 +1,1 @@
+let o;async function t(i=!1){if(o!==void 0&&!i)return o;if(window.navigator.permissions===void 0)return o=!!window.navigator.geolocation,o;try{o=(await window.navigator.permissions.query({name:"geolocation"})).state!=="denied"}catch{o=!!window.navigator.geolocation}return o}export{t as checkGeolocationSupport};

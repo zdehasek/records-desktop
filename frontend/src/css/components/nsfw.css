@@ -1,0 +1,523 @@
+/* ==========================================================================
+   NSFW Gallery
+   ========================================================================== */
+
+/* ---------- Fullscreen gallery (NSFW / Muted) ---------- */
+
+.nsfw-gallery {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-solid);
+}
+
+.nsfw-gallery__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.nsfw-gallery__title {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: oklch(0.65 0.18 350);
+  margin: 0;
+  flex: 1;
+  cursor: default;
+}
+
+.nsfw-gallery__title-input {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: oklch(0.65 0.18 350);
+  background: var(--color-surface);
+  border: 1px solid oklch(0.65 0.18 350 / 0.5);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-xs);
+  margin: 0;
+  flex: 1;
+  font-family: inherit;
+  outline: none;
+}
+
+.dark .nsfw-gallery__title-input {
+  background: var(--color-gray-700);
+}
+
+.nsfw-gallery__rename {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--color-gray-500);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.nsfw-gallery__rename:hover {
+  color: oklch(0.65 0.18 350);
+  background: oklch(0% 0 0 / 0.05);
+}
+
+.dark .nsfw-gallery__rename:hover {
+  background: oklch(100% 0 0 / 0.08);
+}
+
+.nsfw-gallery__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--color-gray-500);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.nsfw-gallery__close:hover {
+  color: var(--color-ink);
+  background: oklch(0% 0 0 / 0.05);
+}
+
+.dark .nsfw-gallery__close:hover {
+  color: var(--color-gray-200);
+  background: oklch(100% 0 0 / 0.08);
+}
+
+.nsfw-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  align-content: start;
+  gap: 4px;
+  padding: var(--space-md);
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+@media (min-width: 640px) {
+  .nsfw-gallery__grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 6px;
+    padding: var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .nsfw-gallery__grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+.nsfw-gallery__item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: var(--color-gray-100);
+  /* clip-path instead of overflow:hidden — grid auto-rows respects
+     aspect-ratio only when overflow is visible */
+  clip-path: inset(0 round var(--radius-sm));
+}
+
+.dark .nsfw-gallery__item {
+  background: var(--color-gray-800);
+}
+
+.nsfw-gallery__item:hover {
+  opacity: 0.85;
+}
+
+.nsfw-gallery__thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.nsfw-gallery__play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: oklch(0% 0 0 / 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.nsfw-gallery__date {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2px 6px;
+  font-size: 0.6rem;
+  color: white;
+  background: linear-gradient(transparent, oklch(0% 0 0 / 0.6));
+  text-align: center;
+}
+
+.nsfw-gallery__empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-gray-500);
+  font-size: var(--text-sm);
+}
+
+.nsfw-gallery__actions {
+  position: absolute;
+  bottom: 22px;
+  left: 4px;
+  right: 4px;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 3;
+}
+
+.nsfw-gallery__item:hover .nsfw-gallery__actions {
+  opacity: 1;
+}
+
+.nsfw-gallery__action-btn {
+  padding: 3px 8px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: oklch(0% 0 0 / 0.7);
+  color: white;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.nsfw-gallery__action-btn:hover {
+  background: oklch(0% 0 0 / 0.9);
+}
+
+.nsfw-gallery__action-btn--move {
+  color: oklch(0.75 0.15 65);
+}
+
+.settings-panel__gallery-btns {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* ==========================================================================
+   NSFW Overlay — Shared across Timeline, Photos, Notes, Lightbox
+   ========================================================================== */
+
+.nsfw-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  background: oklch(0% 0 0 / 0.9);
+  backdrop-filter: blur(8px);
+  z-index: 5;
+  cursor: pointer;
+  user-select: none;
+  border-radius: inherit;
+}
+
+.message > .nsfw-overlay,
+.records__item > .nsfw-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.nsfw-overlay--revealed {
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--space-sm);
+  background: transparent;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+.nsfw-overlay__label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: oklch(90% 0.16 350);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nsfw-overlay__hint {
+  font-size: var(--text-xs);
+  color: oklch(80% 0.02 0);
+}
+
+.nsfw-overlay__hide {
+  position: absolute;
+  top: var(--space-sm);
+  left: 3rem;
+  pointer-events: auto;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid oklch(100% 0 0 / 0.22);
+  border-radius: var(--radius-full);
+  background: oklch(0% 0 0 / 0.68);
+  color: white;
+  font: inherit;
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.nsfw-overlay__hide:hover {
+  background: oklch(0% 0 0 / 0.82);
+}
+
+.message > .nsfw-overlay .nsfw-overlay__hide {
+  top: 3rem;
+  left: var(--space-sm);
+}
+
+.records__item > .nsfw-overlay .nsfw-overlay__hide {
+  left: var(--space-sm);
+}
+
+/* Lightbox variant — fill the media area */
+.nsfw-overlay--lightbox {
+  border-radius: 0;
+}
+
+/* ==========================================================================
+   Lightbox — Blur Support
+   ========================================================================== */
+
+.photos-lightbox__media-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+}
+
+.photos-lightbox__image--blurred {
+  filter: blur(24px);
+}
+
+.photos-lightbox__video--blurred {
+  filter: blur(24px);
+}
+
+/* ==========================================================================
+   Map Marker — NSFW Overlay
+   ========================================================================== */
+
+.map-marker__nsfw-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: oklch(0% 0 0 / 0.4);
+  color: oklch(90% 0.16 350);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Folder Picker Popover
+   ========================================================================== */
+
+.folder-picker {
+  position: fixed;
+  z-index: var(--z-overlay-top);
+  min-width: 200px;
+  max-width: 280px;
+  padding: var(--space-xs) 0;
+  background: var(--color-surface-solid);
+  border: var(--border-retro) solid var(--color-border);
+  border-radius: var(--radius-retro);
+  box-shadow: var(--shadow-retro-lg) var(--color-shadow-light);
+  font-size: var(--text-sm);
+}
+
+.dark .folder-picker {
+  box-shadow: 0 4px 16px oklch(0% 0 0 / 0.4);
+  border-color: var(--color-gray-600);
+  background: var(--color-gray-800);
+}
+
+.folder-picker__title {
+  padding: var(--space-xs) var(--space-md) var(--space-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.folder-picker__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  background: none;
+  color: var(--color-ink);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  text-align: left;
+}
+
+.folder-picker__item:hover {
+  background: var(--color-surface);
+}
+
+.dark .folder-picker__item:hover {
+  background: var(--color-gray-700);
+}
+
+.folder-picker__item--active {
+  font-weight: var(--font-bold);
+}
+
+.folder-picker__item--dot {
+  color: oklch(0.75 0.15 65);
+}
+
+.folder-picker__name {
+  flex: 1;
+}
+
+.folder-picker__check {
+  color: var(--color-primary);
+  font-size: var(--text-xs);
+}
+
+.folder-picker__separator {
+  height: 1px;
+  margin: var(--space-xs) 0;
+  background: var(--color-border);
+}
+
+.folder-picker__input-row {
+  padding: var(--space-xs) var(--space-md);
+}
+
+.folder-picker__input {
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: inherit;
+  font-size: var(--text-sm);
+}
+
+.folder-picker__input::placeholder {
+  color: var(--color-gray-500);
+}
+
+.dark .folder-picker__input {
+  background: var(--color-gray-700);
+  border-color: var(--color-gray-600);
+}
+
+/* ==========================================================================
+   Folder Gallery — Folder List & Back Button
+   ========================================================================== */
+
+.nsfw-gallery__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--color-gray-500);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.nsfw-gallery__back:hover {
+  color: var(--color-ink);
+  background: oklch(0% 0 0 / 0.05);
+}
+
+.dark .nsfw-gallery__back:hover {
+  color: var(--color-gray-200);
+  background: oklch(100% 0 0 / 0.08);
+}
+
+.nsfw-gallery__folder-list {
+  padding: var(--space-md) var(--space-lg);
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Dot-folder amber color on tile-grid items */
+.nsfw-gallery__folder-item--dot.tile-grid__item {
+  color: oklch(0.75 0.15 65);
+}
+
+.nsfw-gallery__folder-item--dot .tile-grid__icon {
+  color: oklch(0.75 0.15 65);
+}
+
+.nsfw-gallery__folder-item--dot .tile-grid__badge {
+  background: oklch(0.75 0.15 65);
+}
+
+/* ==========================================================================
+   Dot-Files Visible — Page Indicator
+   ========================================================================== */
+
+.app-content--dotfiles-visible::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  border: 2px solid red;
+  z-index: calc(var(--z-context-menu) - 1);
+  pointer-events: none;
+  border-radius: 2px;
+}

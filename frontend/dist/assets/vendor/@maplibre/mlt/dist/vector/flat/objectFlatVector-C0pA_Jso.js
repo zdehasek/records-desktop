@@ -1,0 +1,1 @@
+import o from"../vector-B_puz32Y.js";class n extends o{constructor(t,e,r){super(t,new Uint8Array(0),r??e.length),this.values=e}getValueFromBuffer(t){return this.values[t]}}export{n as ObjectFlatVector};

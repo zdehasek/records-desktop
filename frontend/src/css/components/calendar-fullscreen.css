@@ -1,0 +1,295 @@
+/* ==========================================================================
+   Media Timeline
+   ========================================================================== */
+
+.day-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.day-view__day {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  background: var(--color-canvas-alt);
+}
+
+.day-view__content {
+  --day-view-frame-inset: clamp(1.35rem, 3vw, 3rem);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - (var(--space-md) * 2));
+  min-height: calc(100% - (var(--space-md) * 2));
+  margin: var(--space-md) auto;
+  padding: 0 0 calc(var(--space-2xl) * 1.2);
+  color: oklch(96% 0.01 255 / 0.94);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-retro-xl);
+  background: var(--color-body-glow), var(--color-body-surface);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.day-view__content::before {
+  content: "";
+  position: absolute;
+  inset: var(--day-view-frame-inset);
+  top: calc(var(--day-view-frame-inset) + 4.25rem);
+  border: 1px dashed color-mix(in oklch, var(--color-border) 48%, transparent);
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+.day-view__content > * {
+  position: relative;
+  z-index: 1;
+}
+
+.day-view__content--empty {
+  padding-bottom: var(--space-lg);
+}
+
+.day-view__sections {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--space-xl);
+  padding: var(--day-view-frame-inset);
+}
+
+.day-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: 0.15rem 0 0.1rem;
+}
+
+.day-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+}
+
+.day-section__divider {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in oklch, var(--color-border) 72%, transparent);
+}
+
+.day-section__icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--color-surface-solid) 84%, transparent);
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.day-section__icon-btn:hover {
+  background: var(--color-hover-overlay);
+  border-color: var(--color-border-strong);
+  color: var(--color-ink);
+}
+
+.day-section__icon-btn:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.day-section__icon-btn--busy {
+  opacity: 0.65;
+}
+
+.day-section__add-error {
+  max-width: 16rem;
+  color: var(--color-danger, oklch(55% 0.2 25));
+  font-size: var(--text-xs);
+}
+
+.day-view__section-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.day-view__section-items--cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
+  justify-content: start;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+.day-view__section-items--cards > * {
+  width: 100%;
+}
+
+.day-view__section-items--cards:has(.day-view__empty-state) {
+  display: flex;
+  flex-direction: column;
+}
+
+.day-view__empty-state {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: clamp(24rem, calc(100vh - 15.5rem), 52rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.55rem;
+  padding: clamp(2rem, 4vw, 4rem);
+  color: var(--color-ink);
+  overflow: hidden;
+}
+
+.day-view__empty-state h2,
+.day-view__empty-state p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+.day-view__empty-state h2 {
+  max-width: 14ch;
+  font-size: clamp(2.6rem, 5.8vw, 5.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.day-view__empty-state p {
+  max-width: 34rem;
+  font-size: clamp(1rem, 1.4vw, 1.35rem);
+  color: var(--color-ink-muted);
+  line-height: 1.45;
+}
+
+.day-view__empty-kicker {
+  font-size: 0.72rem;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-pink-500) !important;
+}
+
+.day-view__empty-orbit {
+  position: absolute;
+  top: clamp(3.25rem, 6vw, 5.5rem);
+  right: clamp(2rem, 5vw, 4.5rem);
+  width: clamp(10rem, 22vw, 20rem);
+  height: clamp(10rem, 22vw, 20rem);
+  border: 1px solid color-mix(in oklch, var(--color-border) 55%, transparent);
+  border-radius: 999px;
+}
+
+.day-view__empty-orbit span {
+  position: absolute;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  background: var(--color-pink-500);
+  box-shadow: 0 0 0 0.45rem oklch(70% 0.16 350 / 0.14);
+}
+
+.day-view__empty-orbit span:nth-child(1) {
+  top: 0.6rem;
+  left: 1.2rem;
+}
+
+.day-view__empty-orbit span:nth-child(2) {
+  top: 3.25rem;
+  right: -0.35rem;
+  background: oklch(72% 0.12 230);
+}
+
+.day-view__empty-orbit span:nth-child(3) {
+  bottom: 0.75rem;
+  left: 2.6rem;
+  background: oklch(80% 0.14 85);
+}
+
+.day-view .message--calendar {
+  position: relative;
+  left: auto;
+  right: auto;
+  width: 100%;
+  max-width: none;
+  margin: 0 !important;
+}
+
+.day-view .message--timeline-photo {
+  width: 100%;
+  max-width: 320px;
+}
+
+.calendar-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 0;
+  overflow: hidden;
+}
+
+.calendar-view__day {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  container-type: inline-size;
+  --timeline-memory-photo-size: min(
+    140px,
+    calc((100cqw - 2 * var(--space-md) - 36px) / 7)
+  );
+  background:
+    linear-gradient(180deg, oklch(100% 0 0 / 0.68), transparent 32%),
+    linear-gradient(180deg, oklch(96% 0.01 245), oklch(93% 0.014 220));
+}
+
+.dark .calendar-view__day {
+  background:
+    radial-gradient(circle at top, oklch(100% 0 0 / 0.06), transparent 34%),
+    linear-gradient(180deg, oklch(18% 0.01 252), oklch(14% 0.01 252));
+}
+
+#main_content {
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .day-view__content {
+    width: min(100%, calc(100% - 0.5rem));
+    margin: var(--space-sm) auto;
+    padding-bottom: calc(var(--space-2xl) * 1.1);
+    border-radius: var(--radius-retro);
+  }
+
+  .day-section__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .day-view__sections {
+    padding: var(--space-md);
+  }
+
+  .day-view__section-items--cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .day-view__section-items--cards > * {
+    width: 100%;
+  }
+}

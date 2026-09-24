@@ -1,0 +1,1 @@
+import{createLayout as t}from"../../util/struct_array-CTNKNQIW.js";const e=t([{name:"a_pos",components:2,type:"Int16"},{name:"a_normal_ed",components:4,type:"Int16"}],4),o=t([{name:"a_centroid",components:2,type:"Int16"}],4),m=e.members;export{o as centroidAttributes,m as members};

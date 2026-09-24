@@ -1,0 +1,1 @@
+import{createSignal as p,createMemo as o}from"../../../vendor/solid-js/dist/solid-1xjhsyn5.js";function f(){const[t,e]=p(null),r=()=>t()!==null,s=(n,l,m)=>{e({x:n,y:l,items:m})},u=()=>{e(null)},c=o(()=>{const n=t();return n?{x:n.x,y:n.y}:{x:0,y:0}}),i=o(()=>{const n=t();return n?n.items:[]});return{menu:t,isOpen:r,position:c,items:i,open:s,close:u}}export{f as useContextMenu};

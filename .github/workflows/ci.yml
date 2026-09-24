@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - name: Install system dependencies
+        run: pacman -Syu --noconfirm git nodejs npm chromium ffmpeg imagemagick perl-image-exiftool glib2
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run check:static
+      - run: npm run test:coverage:report
+      - run: npm run test:browser
+      - run: npm run check:bundle
+      - run: npm run check:release
+      - run: npm audit --omit=dev --audit-level=high
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2

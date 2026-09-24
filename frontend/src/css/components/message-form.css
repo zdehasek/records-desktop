@@ -1,0 +1,16 @@
+/* Shared validation feedback used by the photo metadata form. */
+.message-form__errors {
+  margin-bottom: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-red-50);
+  border: 2px solid var(--color-red-200);
+  border-radius: var(--radius-xl);
+  color: var(--color-red-700);
+  font-size: var(--text-sm);
+}
+
+.dark .message-form__errors {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: var(--color-red-700);
+  color: var(--color-red-300);
+}

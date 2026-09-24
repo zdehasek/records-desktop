@@ -1,0 +1,382 @@
+/* ==========================================================================
+   Settings View — Fullscreen settings page (Fizzy-inspired)
+   ========================================================================== */
+
+.settings-view {
+  height: 100%;
+  overflow-y: auto;
+  background: var(--rec-page-background);
+  animation: settings-fade-in 0.2s ease;
+}
+
+@keyframes settings-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.settings-view__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg) var(--space-xl);
+  min-height: 56px;
+}
+
+.settings-view__back {
+  position: absolute;
+  left: var(--space-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  border: none;
+  background: transparent;
+  color: var(--color-ink-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.settings-view__back:hover {
+  color: var(--color-ink);
+  background: var(--color-hover-overlay);
+}
+
+.settings-view__esc-hint {
+  font-size: var(--text-xs);
+  color: var(--color-ink-faint);
+  padding: 1px 6px;
+  background: var(--color-hover-overlay);
+  border-radius: 3px;
+  font-family: var(--font-mono, monospace);
+}
+
+.settings-view__title {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--color-ink);
+  margin: 0;
+}
+
+.settings-view__profile {
+  position: absolute;
+  right: var(--space-xl);
+  padding: 3px 9px;
+  border: 1px solid var(--rec-panel-border);
+  border-radius: var(--radius-full);
+  color: var(--color-ink-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+}
+
+.profile-settings__heading,
+.profile-settings__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.profile-settings__heading {
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.profile-settings__heading .settings-panel__hint {
+  margin-bottom: 0;
+}
+
+.profile-settings__list,
+.profile-settings__form {
+  display: grid;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.profile-settings__profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--rec-panel-border);
+  border-radius: var(--radius-md);
+  background: var(--rec-control-background);
+  color: var(--color-ink);
+  cursor: pointer;
+  font: inherit;
+}
+
+.profile-settings__profile--active {
+  border-color: var(--color-primary);
+  cursor: default;
+}
+
+.profile-settings__profile small {
+  color: var(--color-ink-muted);
+}
+
+.profile-settings__switching {
+  padding: var(--space-md);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  color: var(--color-ink);
+  font-size: var(--text-sm);
+}
+
+/* Body: centered content area */
+.settings-view__body {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 var(--space-xl) var(--space-2xl);
+}
+
+/* Two-column grid */
+.settings-view__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .settings-view__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-view__header {
+    padding: var(--space-md) var(--space-md);
+  }
+
+  .settings-view__back {
+    left: var(--space-md);
+  }
+
+  .settings-view__profile {
+    right: var(--space-md);
+  }
+
+  .settings-view__body {
+    padding: 0 var(--space-md) var(--space-xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-view__profile {
+    display: none;
+  }
+}
+
+.settings-view__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Card container for each settings section */
+.settings-view__card {
+  background: var(--rec-panel-background);
+  border: 1px solid var(--rec-panel-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--rec-panel-highlight), var(--rec-panel-shadow);
+  padding: var(--space-lg);
+  backdrop-filter: blur(18px) saturate(1.15);
+}
+
+.dark .settings-view__card {
+  background: var(--rec-panel-background);
+  border-color: var(--rec-panel-border);
+}
+
+.settings-view__card--warning,
+.dark .settings-view__card--warning {
+  border-color: var(--color-warning);
+}
+
+/* ==========================================================================
+   Settings Form Elements (shared — used inside cards)
+   ========================================================================== */
+
+.settings-panel__field {
+  margin-bottom: var(--space-md);
+}
+
+/* Inline row: label left, control right */
+.settings-panel__field--row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.settings-panel__field--row > .settings-panel__label {
+  margin-bottom: 0;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.settings-panel__field--row > .settings-panel__segmented {
+  flex-shrink: 0;
+}
+
+.settings-panel__label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: var(--color-ink);
+  margin-bottom: var(--space-xs);
+  letter-spacing: 0.01em;
+}
+
+.settings-panel__segmented {
+  display: inline-flex;
+  gap: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--rec-panel-border);
+  background: var(--rec-control-background);
+}
+
+.settings-panel__segmented-btn {
+  flex: 1;
+  padding: 4px 14px;
+  font-size: var(--text-xs);
+  background: transparent;
+  border: none;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.settings-panel__segmented-btn:hover {
+  background: var(--color-hover-overlay);
+  color: var(--color-ink);
+}
+
+.settings-panel__segmented-btn--active {
+  background: oklch(0.65 0.18 350);
+  color: white;
+  font-weight: 600;
+}
+
+.settings-panel__hint {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-ink-muted);
+  margin-top: var(--space-xs);
+}
+
+.thumbnail-cache__progress {
+  width: 100%;
+  height: 6px;
+  margin-top: var(--space-sm);
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--color-hover-overlay);
+}
+
+.thumbnail-cache__progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-primary);
+  transition: width 0.2s ease;
+}
+
+.settings-panel__command {
+  display: block;
+  margin-top: var(--space-sm);
+  overflow-wrap: anywhere;
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  user-select: text;
+}
+
+.settings-panel__nsfw-gallery-btn {
+  background: var(--color-surface-raised);
+  border: 1.5px solid var(--color-border);
+  color: var(--color-ink);
+}
+
+.settings-panel__nsfw-gallery-btn:hover {
+  background: var(--color-surface);
+  border-color: oklch(0.65 0.18 350);
+}
+
+.settings-panel__badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  max-width: 45%;
+  min-height: 24px;
+  padding: 3px 9px;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklch, var(--color-primary) 45%, transparent);
+  border-radius: var(--radius-full);
+  background: color-mix(
+    in oklch,
+    var(--color-primary) 16%,
+    var(--rec-control-background)
+  );
+  color: var(--color-ink);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: var(--space-xs);
+}
+
+.settings-panel__section-title {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  color: var(--color-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-sm);
+}
+
+.settings-panel__input {
+  width: 100%;
+  padding: 4px var(--space-sm);
+  border: 1px solid var(--rec-panel-border);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: var(--text-sm);
+  background: var(--rec-control-background);
+  color: var(--color-ink);
+}
+
+.settings-panel__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.settings-panel__time-input {
+  width: 8rem;
+}
+
+.settings-panel__hint--error {
+  color: var(--color-danger, #d32f2f);
+}
+
+/* ---------- Gallery buttons ---------- */
+
+.settings-panel__gallery-btns {
+  display: flex;
+  gap: var(--space-sm);
+}

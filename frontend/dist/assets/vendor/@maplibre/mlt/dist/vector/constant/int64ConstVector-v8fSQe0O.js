@@ -1,0 +1,1 @@
+import n from"../vector-B_puz32Y.js";class i extends n{constructor(r,t,e,o){super(r,o?BigInt64Array.of(t):BigUint64Array.of(t),e)}getValueFromBuffer(r){return this.dataBuffer[0]}}export{i as Int64ConstVector};

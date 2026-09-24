@@ -1,0 +1,1 @@
+import{SequenceVector as c}from"./sequenceVector-BvzDYwcc.js";class u extends c{constructor(r,t,e,o,n){super(r,n?BigInt64Array.of(t):BigUint64Array.of(t),e,o)}getValueFromBuffer(r){return this.dataBuffer[0]+BigInt(r)*this.delta}}export{u as Int64SequenceVector};

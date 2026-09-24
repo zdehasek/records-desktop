@@ -1,0 +1,1 @@
+const T={FEATURE:0},o={BOOLEAN:0,INT_8:1,UINT_8:2,INT_32:3,UINT_32:4,INT_64:5,UINT_64:6,FLOAT:7,DOUBLE:8,STRING:9},c={GEOMETRY:0,STRUCT:1,MAP:2},I={ID:0};export{T as ColumnScope,c as ComplexType,I as LogicalScalarType,o as ScalarType};

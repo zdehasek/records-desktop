@@ -1,0 +1,1 @@
+import{Uniform1f as m,Uniform1i as o}from"../uniform_binding-DC7gP6_C.js";const e=(i,a)=>({u_image:new o(i,a.u_image),u_opacity:new m(i,a.u_opacity)}),p=(i,a)=>({u_image:a,u_opacity:i});export{p as layerOpacityUniformValues,e as layerOpacityUniforms};

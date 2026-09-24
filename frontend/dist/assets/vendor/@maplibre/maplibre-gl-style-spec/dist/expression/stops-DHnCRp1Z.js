@@ -1,0 +1,1 @@
+import{RuntimeError as i}from"./runtime_error-Bt7mxoJr.js";function d(r,n,f){const u=r.length-1;let t=0,l=u,e=0,o,a;for(;t<=l;)if(e=Math.floor((t+l)/2),o=r[e],a=r[e+1],o<=n){if(e===u||n<a)return e;t=e+1}else if(o>n)l=e-1;else throw new i("Input is not a number.",f);return 0}export{d as findStopLessThanOrEqualTo};

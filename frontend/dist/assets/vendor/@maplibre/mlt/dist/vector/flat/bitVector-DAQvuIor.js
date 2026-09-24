@@ -1,0 +1,1 @@
+class r{constructor(t,s){this.values=t,this._size=s}get(t){const s=Math.floor(t/8),e=t%8;return(this.values[s]>>e&1)===1}set(t,s){const e=Math.floor(t/8),o=t%8;this.values[e]=this.values[e]|(s?1:0)<<o}getInt(t){const s=Math.floor(t/8),e=t%8;return this.values[s]>>e&1}size(){return this._size}getBuffer(){return this.values}}export{r as default};

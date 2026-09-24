@@ -1,0 +1,1 @@
+const e={updates:!1,mediaFolders:!0,desktopImports:!1,developerTools:!1,photoGif:!1,shellOpen:!0,thumbnails:!1,missingOptionalSystemPackages:[],missingSystemPackages:[],localMediaProtocol:!1,mapOffline:!0,pushEvents:!0};export{e as recordsCapabilities};

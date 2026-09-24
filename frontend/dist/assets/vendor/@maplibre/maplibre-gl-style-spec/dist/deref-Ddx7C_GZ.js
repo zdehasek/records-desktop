@@ -1,0 +1,1 @@
+import{refProperties as o}from"./util/ref_properties-CjMSKKGz.js";function e(t,n){const f={};for(const i in t)i!=="ref"&&(f[i]=t[i]);return o.forEach(i=>{i in n&&(f[i]=n[i])}),f}function c(t){t=t.slice();const n=Object.create(null);for(let f=0;f<t.length;f++)n[t[f].id]=t[f];for(let f=0;f<t.length;f++)"ref"in t[f]&&(t[f]=e(t[f],n[t[f].ref]));return t}export{c as derefLayers};

@@ -1,0 +1,1 @@
+import{latest as o}from"./reference/latest-2BkH57Vr.js";function l(){const r={},n=o.$version;for(const t in o.$root){const i=o.$root[t];if(i.required){let e=null;t==="version"?e=n:i.type==="array"?e=[]:e={},e!=null&&(r[t]=e)}}return r}export{l as emptyStyle};

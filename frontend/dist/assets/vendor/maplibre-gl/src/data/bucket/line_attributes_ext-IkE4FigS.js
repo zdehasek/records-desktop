@@ -1,0 +1,1 @@
+import{createLayout as t}from"../../util/struct_array-CTNKNQIW.js";const e=t([{name:"a_uv_x",components:1,type:"Float32"},{name:"a_split_index",components:1,type:"Float32"}]),m=e.members;export{e as lineLayoutAttributesExt,m as members};

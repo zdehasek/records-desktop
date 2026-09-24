@@ -1,0 +1,1 @@
+import{ValidationError as o}from"../error/validation_error-CJR1o0RA.js";import{getType as i}from"../util/get_type-KvNykiJK.js";function c(t){const e=t.value,n=t.key,r=i(e);return r!=="string"?[new o(n,e,`string expected, ${r} found`)]:[]}export{c as validateString};

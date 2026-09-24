@@ -1,0 +1,87 @@
+/* Shared message shell retained by timeline media cards. */
+.message {
+  position: relative;
+  margin: 0 auto;
+  max-width: 95%;
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--color-border);
+  background-color: var(--color-surface-solid);
+  box-shadow: 6px 6px 0 oklch(70% 0.18 350 / 0.15);
+  transition: all 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .message {
+    max-width: 85%;
+  }
+}
+
+.sticky-note__palette {
+  position: absolute;
+  top: 0.45rem;
+  left: 50%;
+  right: auto;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid oklch(70% 0.03 95 / 0.3);
+  border-radius: 999px;
+  background: oklch(100% 0 0 / 0.65);
+  box-shadow: 0 6px 14px oklch(0% 0 0 / 0.12);
+  opacity: 0;
+  transform: translate(-50%, -4px);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.message__instax:hover .sticky-note__palette,
+.message__instax:focus-within .sticky-note__palette,
+.sticky-note__palette:hover {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.sticky-note__swatch {
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 1px solid oklch(35% 0.02 95 / 0.3);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px oklch(0% 0 0 / 0.16);
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.sticky-note__swatch:hover,
+.sticky-note__swatch--active {
+  transform: scale(1.12);
+  border-color: oklch(18% 0.02 70 / 0.6);
+}
+
+.sticky-note__swatch--white {
+  background: oklch(98% 0.005 95);
+}
+
+.sticky-note__swatch--butter {
+  background: var(--color-pastel-yellow);
+}
+
+.sticky-note__swatch--blush {
+  background: var(--color-pastel-pink);
+}
+
+.sticky-note__swatch--mint {
+  background: var(--color-pastel-mint);
+}
+
+.sticky-note__swatch--sky {
+  background: var(--color-pastel-blue);
+}
+
+.sticky-note__swatch--lavender {
+  background: var(--color-pastel-lavender);
+}

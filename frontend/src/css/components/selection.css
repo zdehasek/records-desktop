@@ -1,0 +1,52 @@
+/* ==========================================================================
+   Selection Checkbox Overlay
+   ========================================================================== */
+
+.select-check {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  z-index: 6;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid oklch(100% 0 0 / 0.8);
+  background: oklch(0% 0 0 / 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.select-check::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+
+.select-check--active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.select-check svg {
+  display: none;
+  width: 14px;
+  height: 14px;
+  stroke: white;
+  fill: none;
+  stroke-width: 3;
+}
+
+.select-check--active svg {
+  display: block;
+}
+
+.nsfw-gallery__item--selecting,
+.message--selecting {
+  cursor: pointer;
+}

@@ -1,0 +1,1 @@
+import{__module as r}from"../../_virtual/index-ClCzoeAU.js";import{__require as s}from"./murmurhash3_gc-B6WBYpc_.js";import{__require as o}from"./murmurhash2_gc-OQ0Vf8er.js";var e;function h(){if(e)return r.exports;e=1;var u=s(),m=o();return r.exports=u,r.exports.murmur3=u,r.exports.murmur2=m,r.exports}export{h as __require};

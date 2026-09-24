@@ -1,0 +1,1 @@
+import{config as t}from"../util/config-CuR2_ZP5.js";function e(o){return t.REGISTERED_PROTOCOLS[o.substring(0,o.indexOf("://"))]}function r(o,n){t.REGISTERED_PROTOCOLS[o]=n}function E(o){delete t.REGISTERED_PROTOCOLS[o]}export{r as addProtocol,e as getProtocol,E as removeProtocol};

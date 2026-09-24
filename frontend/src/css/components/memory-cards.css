@@ -1,0 +1,304 @@
+/* ==========================================================================
+   Memory Cards — "On this day" compact squares matching week-overview style
+   ========================================================================== */
+
+/* ==========================================================================
+   Container
+   ========================================================================== */
+
+.memory-cards {
+  padding: var(--space-xs) var(--space-md) var(--space-sm);
+  container-type: inline-size;
+}
+
+/* ==========================================================================
+   Header — "On this day"
+   ========================================================================== */
+
+.memory-cards__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 0 var(--space-xs);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-gray-400);
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.memory-cards__toggle {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--color-surface) 86%, transparent);
+  color: var(--color-gray-400);
+  cursor: pointer;
+  padding: 0;
+}
+
+.memory-cards__header:hover,
+.memory-cards__toggle:hover {
+  color: var(--color-gray-500);
+}
+
+.memory-cards__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.memory-cards__play {
+  display: inline-flex;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 9px 0 7px;
+  border: 1px solid
+    color-mix(in oklab, var(--color-accent, #e85d9a) 42%, transparent);
+  border-radius: 999px;
+  background: color-mix(
+    in oklab,
+    var(--color-accent, #e85d9a) 12%,
+    var(--color-surface)
+  );
+  color: var(--color-accent, #e85d9a);
+  cursor: pointer;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: none;
+}
+
+.memory-cards__play:hover {
+  border-color: var(--color-accent, #e85d9a);
+  background: color-mix(
+    in oklab,
+    var(--color-accent, #e85d9a) 18%,
+    var(--color-surface)
+  );
+}
+
+.memory-cards__play:disabled {
+  cursor: wait;
+  opacity: 0.45;
+}
+
+.memory-cards__title::before {
+  content: "\2726 ";
+}
+
+.memory-cards__chevron {
+  transition: transform var(--transition-fast);
+  opacity: 0.4;
+}
+
+.memory-cards__chevron--collapsed {
+  transform: rotate(-90deg);
+}
+
+/* ==========================================================================
+   Card list — horizontal scroll
+   ========================================================================== */
+
+.memory-cards__list {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.memory-cards__list::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================================================
+   Individual card — compact square matching week-overview__cell
+   ========================================================================== */
+
+.memory-cards__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  aspect-ratio: 1;
+  width: var(--timeline-memory-photo-size);
+  max-width: 140px;
+  padding: 8px 6px 6px;
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: 10px;
+  background: var(--color-surface);
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    box-shadow 0.12s;
+  gap: 2px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  font-family: var(--font-sans);
+}
+
+.memory-cards__card:hover {
+  background: var(--color-gray-50);
+  border-color: var(--color-gray-300);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.memory-cards__card:active {
+  background: var(--color-gray-100);
+}
+
+/* ==========================================================================
+   Card photo — absolutely positioned, fills the square
+   ========================================================================== */
+
+.memory-cards__card-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 9px;
+  z-index: 0;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+.memory-cards__card:hover .memory-cards__card-photo {
+  opacity: 1;
+}
+
+/* Date label — absolutely pinned to bottom of card */
+.memory-cards__card-label {
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-gray-400);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Period label — dominant centered text (1Y, 3M, etc.) */
+.memory-cards__card-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-family: var(--font-mono, "SF Mono", "Fira Code", monospace);
+  line-height: 1;
+  color: var(--color-ink);
+  position: relative;
+  z-index: 1;
+}
+
+/* --- When card has photo: overlay text with shadow --- */
+
+.memory-cards__card--has-photo .memory-cards__card-label {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.memory-cards__card--has-photo .memory-cards__card-name {
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* ==========================================================================
+   Dark mode
+   ========================================================================== */
+
+.dark .memory-cards__header {
+  color: var(--color-gray-500);
+}
+
+.dark .memory-cards__header:hover {
+  color: var(--color-gray-400);
+}
+
+.dark .memory-cards__play {
+  border-color: color-mix(
+    in oklab,
+    var(--color-accent, #e85d9a) 45%,
+    transparent
+  );
+  background: color-mix(
+    in oklab,
+    var(--color-accent, #e85d9a) 14%,
+    var(--color-gray-800)
+  );
+  color: var(--color-accent, #e85d9a);
+}
+
+.dark .memory-cards__toggle {
+  border-color: var(--color-gray-700);
+  background: var(--color-gray-800);
+  color: var(--color-gray-500);
+}
+
+.dark .memory-cards__card {
+  border-color: var(--color-gray-700);
+  background: var(--color-gray-800);
+}
+
+.dark .memory-cards__card:hover {
+  background: var(--color-gray-700);
+  border-color: var(--color-gray-600);
+}
+
+.dark .memory-cards__card-label {
+  color: var(--color-gray-500);
+}
+
+/* ==========================================================================
+   Active card — currently viewing this memory day
+   ========================================================================== */
+
+.memory-cards__card--active {
+  border-color: var(--color-accent, #e85d9a);
+  box-shadow: 0 0 0 2px rgba(232, 93, 154, 0.25);
+}
+
+.memory-cards__card--active:hover {
+  border-color: var(--color-accent, #e85d9a);
+}
+
+.dark .memory-cards__card--active {
+  border-color: var(--color-accent, #e85d9a);
+  box-shadow: 0 0 0 2px rgba(232, 93, 154, 0.3);
+}
+
+.dark .memory-cards__card--active:hover {
+  border-color: var(--color-accent, #e85d9a);
+}
+
+/* ==========================================================================
+   Today card — slightly smaller text to fit "Today" label
+   ========================================================================== */
+
+.memory-cards__card--today .memory-cards__card-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-family: var(--font-sans);
+}

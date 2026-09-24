@@ -1,0 +1,1 @@
+const t=[{key:"white",label:"White"},{key:"butter",label:"Butter"},{key:"blush",label:"Blush"},{key:"mint",label:"Mint"},{key:"sky",label:"Sky"},{key:"lavender",label:"Lavender"}],n=new Set(t.map(e=>e.key));function y(e){var o;const l=(o=e==null?void 0:e.note_style)==null?void 0:o.color;return n.has(l)?l:"white"}export{t as STICKY_NOTE_COLORS,y as getStickyNoteColor};

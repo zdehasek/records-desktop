@@ -1,0 +1,56 @@
+/* ==========================================================================
+   Error Boundary
+   ========================================================================== */
+
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  text-align: center;
+  flex: 1;
+  min-height: 200px;
+}
+
+.error-boundary--fatal {
+  min-height: 100vh;
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.error-boundary__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.error-boundary__message {
+  font-size: 0.875rem;
+  color: var(--color-ink-muted);
+}
+
+.error-boundary__detail {
+  max-width: 600px;
+  max-height: 200px;
+  overflow: auto;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-retro);
+  background: var(--color-surface-dim);
+  color: var(--color-danger, #c53030);
+  font-size: 0.75rem;
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,1 @@
+import{onMount as i,onCleanup as e}from"../../../vendor/solid-js/dist/solid-1xjhsyn5.js";function c(t){i(()=>{for(const[o,f]of t){if(typeof o!="function")continue;const n=o(f);typeof n=="function"&&e(n)}})}export{c as usePushSubscriptions};

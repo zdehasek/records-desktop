@@ -1,0 +1,1 @@
+import{VariableSizeVector as s}from"../variableSizeVector-BYwV4FGa.js";import{decodeString as f}from"../../decoding/decodingUtils-CQV2Uxeo.js";class n extends s{constructor(t,r,e,o){super(t,r,e,o??r.length-1)}getValueFromBuffer(t){const r=this.offsetBuffer[t],e=this.offsetBuffer[t+1];return f(this.dataBuffer,r,e)}}export{n as StringFlatVector};

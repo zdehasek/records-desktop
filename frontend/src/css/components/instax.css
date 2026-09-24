@@ -1,0 +1,320 @@
+/* ==========================================================================
+   Photo / Video Messages — Instax / Polaroid Style
+   ========================================================================== */
+
+/* Strip the card frame from media messages */
+.message--media.message--calendar,
+.calendar-view__messages .message--media.message--calendar,
+.dark .message--media.message--calendar,
+.dark .calendar-view__messages .message--media.message--calendar {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.message--media.message--calendar:hover,
+.calendar-view__messages .message--media.message--calendar:hover,
+.dark .message--media.message--calendar:hover,
+.dark .calendar-view__messages .message--media.message--calendar:hover {
+  box-shadow: none !important;
+}
+
+.calendar-view__messages .message--media.message--calendar {
+  width: fit-content;
+  max-width: min(320px, 100%);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.calendar-view__messages .message--media .message__instax {
+  display: block;
+  width: 320px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.calendar-view__messages .message--media .message__instax-media {
+  width: 300px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.calendar-view__messages .message--media .message__instax-image {
+  width: 300px;
+  max-width: 300px;
+  height: 300px;
+}
+
+.calendar-view__messages .message--media .message__instax:hover {
+  transform: none;
+}
+
+.message__instax {
+  display: inline-block;
+  background: var(--instax-frame-color, #f5f4f0);
+  padding: 10px 10px 0 10px;
+  border-radius: 3px;
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+  width: auto;
+  max-width: 320px;
+  box-sizing: border-box;
+}
+
+.message__instax--butter {
+  --instax-frame-color: var(--color-pastel-yellow);
+}
+
+.message__instax--blush {
+  --instax-frame-color: var(--color-pastel-pink);
+}
+
+.message__instax--mint {
+  --instax-frame-color: var(--color-pastel-mint);
+}
+
+.message__instax--sky {
+  --instax-frame-color: var(--color-pastel-blue);
+}
+
+.message__instax--lavender {
+  --instax-frame-color: var(--color-pastel-lavender);
+}
+
+.message__instax:hover {
+  transform: scale(1.015) rotate(0.4deg);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.12),
+    0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Keep timeline media stable (no hover "jump") */
+.calendar-view__messages .message--media .message__instax,
+.calendar-view__messages .message--media .message__instax:hover {
+  transform: none !important;
+}
+
+.message__instax-media {
+  position: relative;
+  cursor: pointer;
+}
+
+.message__instax-image {
+  width: 300px;
+  max-width: 300px;
+  height: 300px;
+  display: block;
+  object-fit: cover;
+  background-color: #e8e6e1;
+}
+
+.message__instax-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  pointer-events: none;
+  transition: background 0.15s ease;
+}
+
+.message__instax-media:hover .message__instax-play {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.message__instax-time {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 0.7rem;
+  font-weight: var(--font-semibold);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+
+.message__instax-important {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: oklch(0% 0 0 / 0.45);
+  color: oklch(100% 0 0);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.message__instax-media:hover .message__instax-important,
+.message__instax-important--active {
+  opacity: 1;
+}
+
+.message__instax-important--active {
+  color: oklch(85% 0.18 85);
+  background: oklch(0% 0 0 / 0.55);
+}
+
+.message__instax-important:hover {
+  transform: scale(1.15);
+}
+
+.message__instax-share {
+  position: absolute;
+  top: 8px;
+  left: 44px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: oklch(0% 0 0 / 0.45);
+  color: oklch(100% 0 0);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+
+.message__instax-media:hover .message__instax-share,
+.message__instax-media:focus-within .message__instax-share,
+.message__instax-share--copying,
+.message__instax-share--copied,
+.message__instax-share--error {
+  opacity: 1;
+}
+
+.message__instax-share:hover:not(:disabled) {
+  transform: scale(1.15);
+}
+
+.message__instax-share:disabled {
+  cursor: wait;
+}
+
+.message__instax-share--copied {
+  color: oklch(88% 0.18 145);
+  background: oklch(0% 0 0 / 0.6);
+}
+
+.message__instax-share--error {
+  color: oklch(72% 0.22 25);
+  background: oklch(0% 0 0 / 0.6);
+}
+
+.message__instax-bottom {
+  min-height: 52px;
+  padding: 10px 4px 12px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: text;
+}
+
+.message__instax-error {
+  margin-top: 4px;
+  color: #a92d2d;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+
+.message__instax-note {
+  font-family: var(--font-handwriting);
+  font-size: 1.2rem;
+  line-height: 1.35;
+  color: #3a3a38;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.message__instax-placeholder {
+  font-family: var(--font-handwriting);
+  font-size: 1.1rem;
+  color: #b8b5af;
+  pointer-events: none;
+  user-select: none;
+}
+
+.message__instax-input {
+  font-family: var(--font-handwriting);
+  font-size: 1.2rem;
+  line-height: 1.35;
+  color: #3a3a38;
+  display: block;
+  background: none;
+  border: none;
+  outline: none;
+  width: 100%;
+  min-height: 1.35em;
+  padding: 0;
+  margin: 0;
+  resize: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message__instax-input::placeholder {
+  color: #b8b5af;
+}
+
+/* In dark mode the Instax frame stays light — like a real printed photo */
+.dark .message__instax {
+  background: var(--instax-frame-color, #eae8e3);
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.25),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dark .message__instax:hover {
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.dark .message__instax-image {
+  background-color: #d5d3ce;
+}
+
+.dark .message__instax-note {
+  color: #3a3a38;
+}
+
+.dark .message__instax-input {
+  color: #3a3a38;
+}

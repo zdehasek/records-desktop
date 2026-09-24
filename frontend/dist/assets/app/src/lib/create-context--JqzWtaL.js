@@ -1,0 +1,1 @@
+import{createComponent as n,useContext as o,createContext as u}from"../../../vendor/solid-js/dist/solid-1xjhsyn5.js";function i(r){const t=u();return{Provider:e=>n(t.Provider,{get value(){return e.value},get children(){return e.children}}),use:()=>{const e=o(t);if(e===void 0)throw new Error(`${r} context not found`);return e}}}export{i as createSimpleContext};

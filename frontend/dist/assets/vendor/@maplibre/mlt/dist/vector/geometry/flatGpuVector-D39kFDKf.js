@@ -1,0 +1,1 @@
+import{GpuVector as p}from"./gpuVector-DBUSEpd2.js";function c(n,e,t,r,o){return new u(n,e,t,r,o)}class u extends p{constructor(e,t,r,o,s){super(t,r,o,s),this._geometryTypes=e}geometryType(e){return this._geometryTypes[e]}get numGeometries(){return this._geometryTypes.length}containsSingleGeometryType(){return!1}}export{u as FlatGpuVector,c as createFlatGpuVector};

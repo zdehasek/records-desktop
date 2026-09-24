@@ -1,0 +1,77 @@
+/* ==========================================================================
+   Bottom Navigation Bar
+   ========================================================================== */
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-bottom-nav);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  height: 52px;
+  padding: 0 var(--space-md);
+  background: var(--rec-chrome-background);
+  border-top: 1px solid var(--rec-panel-border);
+  box-shadow:
+    var(--rec-panel-highlight),
+    0 -12px 30px oklch(35% 0.03 260 / 0.08);
+  backdrop-filter: blur(22px) saturate(1.25);
+}
+
+.bottom-nav__tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  max-width: 100px;
+  padding: 0 var(--space-sm);
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-ink-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-wide);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.bottom-nav__tab:hover {
+  color: var(--color-ink);
+  background: var(--color-hover-overlay);
+}
+
+/* Active tab: bold pill with primary color */
+.bottom-nav__tab--active {
+  color: white;
+  background: var(--color-pink-500);
+  font-weight: var(--font-bold);
+}
+
+.bottom-nav__tab--active:hover {
+  background: var(--color-pink-600);
+  color: white;
+}
+
+/* Dark mode */
+.dark .bottom-nav {
+  background: var(--rec-chrome-background);
+  border-top-color: var(--rec-panel-border);
+}
+
+.dark .bottom-nav__tab--active {
+  background: var(--color-pink-500);
+  color: white;
+}
+
+.bottom-nav--hidden {
+  display: none;
+}

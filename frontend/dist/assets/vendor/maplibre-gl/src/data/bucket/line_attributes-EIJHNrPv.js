@@ -1,0 +1,1 @@
+import{createLayout as t}from"../../util/struct_array-CTNKNQIW.js";const e=t([{name:"a_pos_normal",components:2,type:"Int16"},{name:"a_data",components:4,type:"Uint8"}],4),n=e.members;export{e as lineLayoutAttributes,n as members};

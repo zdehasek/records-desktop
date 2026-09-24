@@ -1,0 +1,1 @@
+class r{constructor(e){this._methodToThrottle=e,this._triggered=!1,this._channel=new MessageChannel,this._channel.port2.onmessage=()=>{this._triggered=!1,this._methodToThrottle()}}trigger(){var e;this._triggered||(this._triggered=!0,(e=this._channel)==null||e.port1.postMessage(!0))}remove(){delete this._channel,this._methodToThrottle=()=>{}}}export{r as ThrottledInvoker};

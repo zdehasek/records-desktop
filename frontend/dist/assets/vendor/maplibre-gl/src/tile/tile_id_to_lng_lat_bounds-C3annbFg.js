@@ -1,0 +1,1 @@
+import{lngFromMercatorX as r,latFromMercatorY as M}from"../geo/mercator_coordinate-QVV1vB8V.js";import{LngLatBounds as m}from"../geo/lng_lat_bounds-BI0vo_oI.js";function w({x:n,y:a,z:o},t=0){const c=r((n-t)/Math.pow(2,o)),l=M((a+1+t)/Math.pow(2,o)),p=r((n+1+t)/Math.pow(2,o)),i=M((a-t)/Math.pow(2,o));return new m([c,l],[p,i])}export{w as tileIdToLngLatBounds};

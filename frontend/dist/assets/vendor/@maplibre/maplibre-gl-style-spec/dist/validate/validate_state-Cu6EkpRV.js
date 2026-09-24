@@ -1,0 +1,1 @@
+import{ValidationError as r}from"../error/validation_error-CJR1o0RA.js";import{getType as t}from"../util/get_type-KvNykiJK.js";import{isObjectLiteral as a}from"../util/is_object_literal-Dbwm4rtD.js";function l(e){return a(e.value)?[]:[new r(e.key,e.value,`object expected, ${t(e.value)} found`)]}export{l as validateState};

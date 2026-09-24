@@ -1,0 +1,1 @@
+import{createLayout as t}from"../../util/struct_array-CTNKNQIW.js";const o=t([{name:"a_dasharray_from",components:4,type:"Uint16"},{name:"a_dasharray_to",components:4,type:"Uint16"}]);export{o as dashAttributes};

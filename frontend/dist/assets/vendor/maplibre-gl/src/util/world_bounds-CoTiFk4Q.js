@@ -1,0 +1,1 @@
+import{MIN_TILE_ZOOM as i,MAX_TILE_ZOOM as M}from"./util-CTMNnWi7.js";import{MercatorCoordinate as a}from"../geo/mercator_coordinate-QVV1vB8V.js";function L(r,o,n){return!(r<i||r>M||n<0||n>=Math.pow(2,r)||o<0||o>=Math.pow(2,r))}function f(r,o){const{x:n,y:t}=a.fromLngLat(o);return!(r<i||r>M||t<0||t>=1||n<0||n>=1)}export{L as isInBoundsForTileZoomXY,f as isInBoundsForZoomLngLat};

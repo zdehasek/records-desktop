@@ -1,0 +1,550 @@
+/* ==========================================================================
+   Design Tokens - Fonts, Variables, Colors
+   ========================================================================== */
+
+/* ===== Fonts ===== */
+/* Bundled locally via @fontsource — no external network requests. */
+
+/* ===== Design Tokens ===== */
+:root {
+  /* Spacing Scale */
+  --space-xs: 0.25rem; /* 4px */
+  --space-sm: 0.5rem; /* 8px */
+  --space-md: 1rem; /* 16px */
+  --space-lg: 1.5rem; /* 24px */
+  --space-xl: 2rem; /* 32px */
+  --space-2xl: 3rem; /* 48px */
+  --space-3xl: 4rem; /* 64px */
+
+  /* Typography */
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
+  --font-handwriting: "Caveat", cursive;
+
+  /* Font sizes */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+  --text-4xl: 2.25rem; /* 36px */
+
+  /* Line heights */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  /* Font weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-black: 900;
+
+  /* Letter spacing */
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+
+  /* FastRetro Hard Shadows */
+  --shadow-retro-xs: 2px 2px 0;
+  --shadow-retro-sm: 3px 3px 0;
+  --shadow-retro: 4px 4px 0;
+  --shadow-retro-lg: 6px 6px 0;
+  --shadow-retro-xl: 8px 8px 0;
+
+  /* Border Radius */
+  --radius-none: 0;
+  --radius-sm: 0.25rem; /* 4px */
+  --radius-md: 0.5rem; /* 8px */
+  --radius-lg: 0.75rem; /* 12px */
+  --radius-xl: 1rem; /* 16px */
+  --radius-2xl: 1.5rem; /* 24px */
+  --radius-3xl: 2rem; /* 32px */
+  --radius-full: 9999px;
+
+  /* FastRetro Radius */
+  --radius-retro-sm: 0.625rem; /* 10px */
+  --radius-retro: 0.875rem; /* 14px */
+  --radius-retro-lg: 1.125rem; /* 18px */
+  --radius-retro-xl: 1.5rem; /* 24px */
+
+  /* Z-Index Scale */
+  --z-0: 0;
+  --z-10: 10;
+  --z-20: 20;
+  --z-30: 30;
+  --z-40: 40;
+  --z-50: 50;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-bottom-nav: 800;
+  --z-batch-bar: 810;
+  --z-slideover: 900;
+  --z-fullscreen: 1000;
+  --z-context-menu: 9999;
+  --z-overlay-top: 10000;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+  --transition-slower: 500ms ease;
+
+  --transition-colors:
+    color 200ms ease, background-color 200ms ease, border-color 200ms ease;
+  --transition-transform: transform 200ms ease;
+  --transition-shadow: box-shadow 200ms ease;
+  --transition-all: all 200ms ease;
+
+  /* Container Widths */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+  --container-prose: 65ch;
+
+  /* Border Widths */
+  --border-width: 1px;
+  --border-width-2: 2px;
+  --border-width-3: 3px;
+  --border-width-4: 4px;
+
+  /* FastRetro Border Widths */
+  --border-retro: 2.5px;
+  --border-retro-thick: 3px;
+
+  /* Opacity */
+  --opacity-0: 0;
+  --opacity-25: 0.25;
+  --opacity-50: 0.5;
+  --opacity-75: 0.75;
+  --opacity-100: 1;
+
+  /* Sticky notes */
+  --sticky-note-width: 320px;
+  --sticky-note-min-height: 362px;
+  --sticky-note-expanded-width: 320px;
+}
+
+/* ===== Color System - OKLCH with Light/Dark Mode Support ===== */
+:root {
+  color-scheme: light;
+
+  /* Pink theme - Primary */
+  --color-pink-50: oklch(97% 0.02 350);
+  --color-pink-100: oklch(94% 0.04 350);
+  --color-pink-200: oklch(90% 0.08 350);
+  --color-pink-300: oklch(82% 0.12 350);
+  --color-pink-400: oklch(72% 0.16 350);
+  --color-pink-500: oklch(65% 0.18 350);
+  --color-pink-600: oklch(58% 0.18 350);
+  --color-pink-700: oklch(50% 0.16 350);
+  --color-pink-800: oklch(42% 0.14 350);
+  --color-pink-900: oklch(35% 0.12 350);
+
+  /* Sky theme - Secondary */
+  --color-sky-50: oklch(97% 0.01 220);
+  --color-sky-100: oklch(94% 0.03 220);
+  --color-sky-200: oklch(90% 0.06 220);
+  --color-sky-300: oklch(82% 0.09 220);
+  --color-sky-400: oklch(72% 0.12 220);
+  --color-sky-500: oklch(65% 0.12 220);
+  --color-sky-600: oklch(55% 0.12 220);
+  --color-sky-700: oklch(45% 0.1 220);
+  --color-sky-800: oklch(38% 0.08 220);
+  --color-sky-900: oklch(30% 0.06 220);
+
+  /* Cyan */
+  --color-cyan-400: oklch(75% 0.12 195);
+  --color-cyan-500: oklch(68% 0.12 195);
+
+  /* Amber theme - Accent */
+  --color-amber-50: oklch(98% 0.02 85);
+  --color-amber-100: oklch(96% 0.04 85);
+  --color-amber-200: oklch(92% 0.08 85);
+  --color-amber-300: oklch(86% 0.12 85);
+  --color-amber-400: oklch(78% 0.16 85);
+  --color-amber-500: oklch(75% 0.18 85);
+  --color-amber-600: oklch(65% 0.18 65);
+  --color-amber-700: oklch(55% 0.16 55);
+  --color-amber-800: oklch(45% 0.14 45);
+  --color-amber-900: oklch(35% 0.12 35);
+
+  /* Orange */
+  --color-orange-400: oklch(75% 0.16 50);
+
+  /* Red - Negative/Error */
+  --color-red-50: oklch(97% 0.02 25);
+  --color-red-100: oklch(94% 0.04 25);
+  --color-red-200: oklch(88% 0.08 25);
+  --color-red-400: oklch(65% 0.18 25);
+  --color-red-500: oklch(58% 0.2 25);
+  --color-red-600: oklch(50% 0.2 25);
+  --color-red-700: oklch(42% 0.18 25);
+
+  /* Green - Positive/Success */
+  --color-green-50: oklch(97% 0.02 145);
+  --color-green-100: oklch(94% 0.04 145);
+  --color-green-400: oklch(68% 0.14 145);
+  --color-green-500: oklch(60% 0.14 145);
+  --color-green-600: oklch(52% 0.14 145);
+
+  /* FastRetro Pastel Accents */
+  --color-pastel-cream: oklch(97% 0.03 95);
+  --color-pastel-yellow: oklch(95% 0.08 95);
+  --color-pastel-peach: oklch(93% 0.08 45);
+  --color-pastel-pink: oklch(92% 0.1 350);
+  --color-pastel-lavender: oklch(92% 0.08 285);
+  --color-pastel-blue: oklch(90% 0.08 230);
+  --color-pastel-mint: oklch(93% 0.06 165);
+
+  /* FastRetro Shadow Colors - Light Mode */
+  --color-shadow-light: oklch(20% 0.02 260);
+  --color-shadow-dark: oklch(72% 0.02 255);
+
+  /* FastRetro Shadow Colors - Dark Mode Accents */
+  --color-shadow-dark-default: var(--color-shadow-light);
+  --color-shadow-dark-pink: oklch(60% 0.22 350);
+  --color-shadow-dark-sky: oklch(50% 0.18 230);
+  --color-shadow-dark-amber: oklch(65% 0.2 75);
+
+  /* Dark mode border accents */
+  --color-border-dark-default: var(--color-shadow-light);
+  --color-border-dark-pink: oklch(75% 0.2 350);
+  --color-border-dark-sky: oklch(65% 0.15 230);
+  --color-border-dark-amber: oklch(75% 0.18 75);
+
+  /* Neutral Colors - Gray Scale */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-gray-50: oklch(98% 0.004 255);
+  --color-gray-100: oklch(95% 0.006 255);
+  --color-gray-200: oklch(90% 0.01 255);
+  --color-gray-300: oklch(82% 0.014 255);
+  --color-gray-400: oklch(68% 0.018 255);
+  --color-gray-500: oklch(56% 0.02 255);
+  --color-gray-600: oklch(46% 0.022 255);
+  --color-gray-700: oklch(36% 0.02 255);
+  --color-gray-800: oklch(27% 0.018 255);
+  --color-gray-900: oklch(20% 0.014 255);
+  --color-gray-950: oklch(13% 0.01 255);
+
+  /* Slate (blue-tinted gray) */
+  --color-slate-50: oklch(98% 0.005 265);
+  --color-slate-100: oklch(96% 0.008 265);
+  --color-slate-200: oklch(92% 0.01 265);
+  --color-slate-300: oklch(87% 0.012 265);
+  --color-slate-400: oklch(70% 0.015 265);
+  --color-slate-500: oklch(55% 0.015 265);
+  --color-slate-600: oklch(45% 0.015 265);
+  --color-slate-700: oklch(37% 0.015 265);
+  --color-slate-800: oklch(27% 0.012 265);
+  --color-slate-900: oklch(20% 0.01 265);
+  --color-slate-950: oklch(13% 0.008 265);
+
+  /* ===== Semantic Colors - Light Mode ===== */
+
+  /* Canvas - page background */
+  --color-canvas: oklch(98.5% 0.004 255);
+  --color-canvas-alt: linear-gradient(
+    180deg,
+    oklch(99% 0.004 255) 0%,
+    oklch(97% 0.012 245) 52%,
+    oklch(96% 0.01 210) 100%
+  );
+
+  /* Surface - card/component backgrounds */
+  --color-surface: rgba(255, 255, 255, 0.88);
+  --color-surface-solid: #ffffff;
+  --color-surface-elevated: rgba(255, 255, 255, 0.96);
+  --color-body-surface: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--color-surface-solid) 94%, white),
+    color-mix(in oklch, var(--color-surface-solid) 94%, var(--color-sky-100))
+  );
+  --color-body-glow: linear-gradient(
+    135deg,
+    oklch(98% 0.018 350 / 0.44),
+    oklch(98% 0.016 220 / 0.34)
+  );
+  --color-chrome: color-mix(
+    in oklch,
+    var(--color-surface-solid) 86%,
+    transparent
+  );
+
+  /* REC shell primitives */
+  --rec-page-background: var(--color-canvas-alt);
+  --rec-chrome-background: color-mix(
+    in oklch,
+    var(--color-surface-solid) 82%,
+    transparent
+  );
+  --rec-panel-background: color-mix(
+    in oklch,
+    var(--color-surface-solid) 86%,
+    transparent
+  );
+  --rec-panel-background-strong: color-mix(
+    in oklch,
+    var(--color-surface-solid) 96%,
+    transparent
+  );
+  --rec-panel-border: color-mix(in oklch, var(--color-border) 82%, transparent);
+  --rec-panel-highlight: inset 0 1px 0 oklch(100% 0 0 / 0.84);
+  --rec-panel-shadow:
+    0 18px 46px oklch(42% 0.035 255 / 0.12), 0 1px 0 oklch(100% 0 0 / 0.62);
+  --rec-control-background: color-mix(
+    in oklch,
+    var(--color-surface-solid) 92%,
+    transparent
+  );
+  --rec-accent-soft: color-mix(in oklch, var(--color-primary) 11%, transparent);
+
+  /* Ink - text colors */
+  --color-ink: oklch(24% 0.018 255);
+  --color-ink-muted: oklch(47% 0.02 255);
+  --color-ink-faint: oklch(62% 0.018 255);
+  --color-ink-reversed: var(--color-white);
+
+  /* Border colors */
+  --color-border: oklch(88% 0.012 255);
+  --color-border-strong: oklch(80% 0.018 255);
+  --color-border-muted: oklch(93% 0.008 255);
+
+  /* Interactive states */
+  --color-focus-ring: oklch(65% 0.18 350 / 0.4);
+  --color-hover-overlay: rgba(0, 0, 0, 0.04);
+  --color-active-overlay: rgba(0, 0, 0, 0.08);
+
+  /* Semantic - status colors */
+  --color-primary: var(--color-pink-500);
+  --color-primary-hover: var(--color-pink-600);
+  --color-secondary: var(--color-sky-500);
+  --color-secondary-hover: var(--color-sky-600);
+  --color-negative: var(--color-red-500);
+  --color-negative-hover: var(--color-red-600);
+  --color-positive: var(--color-green-500);
+  --color-positive-hover: var(--color-green-600);
+  --color-warning: var(--color-amber-500);
+  --color-warning-hover: var(--color-amber-600);
+}
+
+/* ===== Dark Mode - Media Query (Auto) ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    /* Canvas */
+    --color-canvas: #101827;
+    --color-canvas-alt: linear-gradient(
+      135deg,
+      #202a3a 0%,
+      #121b29 48%,
+      #1b2535 100%
+    );
+
+    /* Surface */
+    --color-surface: oklch(24% 0.018 255 / 0.9);
+    --color-surface-solid: oklch(24% 0.018 255);
+    --color-surface-elevated: oklch(27% 0.02 255 / 0.95);
+    --color-body-surface: linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--color-surface-solid) 90%, white),
+      color-mix(in oklch, var(--color-surface-solid) 82%, black)
+    );
+    --color-body-glow: radial-gradient(
+      circle at 18% 28%,
+      oklch(70% 0.16 350 / 0.18),
+      transparent 34%
+    );
+    --color-chrome: color-mix(
+      in oklch,
+      var(--color-surface-solid) 86%,
+      transparent
+    );
+
+    /* REC shell primitives */
+    --rec-page-background:
+      radial-gradient(
+        circle at 16% 12%,
+        oklch(62% 0.16 350 / 0.22),
+        transparent 32%
+      ),
+      radial-gradient(
+        circle at 86% 10%,
+        oklch(64% 0.13 220 / 0.2),
+        transparent 28%
+      ),
+      radial-gradient(
+        circle at 76% 88%,
+        oklch(72% 0.14 85 / 0.13),
+        transparent 32%
+      ),
+      var(--color-canvas-alt);
+    --rec-chrome-background: color-mix(
+      in oklch,
+      var(--color-surface-solid) 78%,
+      transparent
+    );
+    --rec-panel-background: color-mix(
+      in oklch,
+      var(--color-surface-solid) 82%,
+      transparent
+    );
+    --rec-panel-background-strong: color-mix(
+      in oklch,
+      var(--color-surface-solid) 94%,
+      transparent
+    );
+    --rec-panel-border: color-mix(
+      in oklch,
+      var(--color-border) 76%,
+      transparent
+    );
+    --rec-panel-highlight: inset 0 1px 0 oklch(100% 0 0 / 0.08);
+    --rec-panel-shadow: 0 20px 52px oklch(0% 0 0 / 0.26);
+    --rec-control-background: color-mix(
+      in oklch,
+      var(--color-surface-solid) 84%,
+      transparent
+    );
+    --rec-accent-soft: color-mix(
+      in oklch,
+      var(--color-primary) 19%,
+      transparent
+    );
+
+    /* Ink */
+    --color-ink: var(--color-gray-100);
+    --color-ink-muted: var(--color-gray-400);
+    --color-ink-faint: var(--color-gray-500);
+    --color-ink-reversed: var(--color-gray-900);
+
+    /* Border */
+    --color-border: var(--color-slate-700);
+    --color-border-strong: var(--color-slate-600);
+    --color-border-muted: var(--color-slate-800);
+
+    /* Interactive */
+    --color-focus-ring: oklch(72% 0.16 350 / 0.45);
+    --color-hover-overlay: rgba(255, 255, 255, 0.04);
+    --color-active-overlay: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* ===== Dark Mode - Class Override (Manual Toggle) ===== */
+.dark {
+  color-scheme: dark;
+
+  /* Canvas */
+  --color-canvas: #101827;
+  --color-canvas-alt: linear-gradient(
+    135deg,
+    #202a3a 0%,
+    #121b29 48%,
+    #1b2535 100%
+  );
+
+  /* Surface */
+  --color-surface: oklch(24% 0.018 255 / 0.9);
+  --color-surface-solid: oklch(24% 0.018 255);
+  --color-surface-elevated: oklch(27% 0.02 255 / 0.95);
+  --color-body-surface: linear-gradient(
+    135deg,
+    color-mix(in oklch, var(--color-surface-solid) 90%, white),
+    color-mix(in oklch, var(--color-surface-solid) 82%, black)
+  );
+  --color-body-glow: radial-gradient(
+    circle at 18% 28%,
+    oklch(70% 0.16 350 / 0.18),
+    transparent 34%
+  );
+  --color-chrome: color-mix(
+    in oklch,
+    var(--color-surface-solid) 86%,
+    transparent
+  );
+
+  /* REC shell primitives */
+  --rec-page-background:
+    radial-gradient(
+      circle at 16% 12%,
+      oklch(62% 0.16 350 / 0.22),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 86% 10%,
+      oklch(64% 0.13 220 / 0.2),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 76% 88%,
+      oklch(72% 0.14 85 / 0.13),
+      transparent 32%
+    ),
+    var(--color-canvas-alt);
+  --rec-chrome-background: color-mix(
+    in oklch,
+    var(--color-surface-solid) 78%,
+    transparent
+  );
+  --rec-panel-background: color-mix(
+    in oklch,
+    var(--color-surface-solid) 82%,
+    transparent
+  );
+  --rec-panel-background-strong: color-mix(
+    in oklch,
+    var(--color-surface-solid) 94%,
+    transparent
+  );
+  --rec-panel-border: color-mix(in oklch, var(--color-border) 76%, transparent);
+  --rec-panel-highlight: inset 0 1px 0 oklch(100% 0 0 / 0.08);
+  --rec-panel-shadow: 0 20px 52px oklch(0% 0 0 / 0.26);
+  --rec-control-background: color-mix(
+    in oklch,
+    var(--color-surface-solid) 84%,
+    transparent
+  );
+  --rec-accent-soft: color-mix(in oklch, var(--color-primary) 19%, transparent);
+
+  /* Ink */
+  --color-ink: var(--color-gray-100);
+  --color-ink-muted: var(--color-gray-400);
+  --color-ink-faint: var(--color-gray-500);
+  --color-ink-reversed: var(--color-gray-900);
+
+  /* Border */
+  --color-border: var(--color-slate-700);
+  --color-border-strong: var(--color-slate-600);
+  --color-border-muted: var(--color-slate-800);
+
+  /* Interactive */
+  --color-focus-ring: oklch(72% 0.16 350 / 0.45);
+  --color-hover-overlay: rgba(255, 255, 255, 0.04);
+  --color-active-overlay: rgba(255, 255, 255, 0.08);
+}

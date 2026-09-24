@@ -1,0 +1,1 @@
+import{ValidationError as r}from"../error/validation_error-CJR1o0RA.js";import{getType as a}from"../util/get_type-KvNykiJK.js";function u(e){const o=e.value,n=e.key,t=a(o);return t!=="boolean"?[new r(n,o,`boolean expected, ${t} found`)]:[]}export{u as validateBoolean};

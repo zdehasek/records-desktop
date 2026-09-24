@@ -1,0 +1,11 @@
+node_modules/
+frontend/dist/
+runtime/vendor/
+coverage/
+test-results/
+playwright-report/
+.playwright-cli/
+.dev/
+screenshots/
+*.sqlite3
+package-lock.json

@@ -1,0 +1,1 @@
+function p(a,e,s,i,f){if(!s||!(i!=null&&i.imageAtlas))return;const n=i.imageAtlas.patternPositions;let o=n[s.to.toString()],t=n[s.from.toString()];if(!o&&t&&(o=t),!t&&o&&(t=o),!o||!t){const r=f.getPaintProperty(e);o=n[r],t=n[r]}o&&t&&a.setConstantPatternPositions(o,t)}export{p as updatePatternPositionsInProgram};

@@ -1,0 +1,1 @@
+class f{constructor(e,s,t){this.vertexBuffer=e,this.indexBuffer=s,this.segments=t}destroy(){this.vertexBuffer.destroy(),this.indexBuffer.destroy(),this.segments.destroy(),this.vertexBuffer=null,this.indexBuffer=null,this.segments=null}}export{f as Mesh};

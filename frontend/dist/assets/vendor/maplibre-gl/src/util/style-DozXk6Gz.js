@@ -1,0 +1,1 @@
+function c(r){const o=[];if(typeof r=="string")o.push({id:"default",url:r});else if(r&&r.length>0){const u=[];for(const{id:e,url:n}of r){const t=`${e}${n}`;u.includes(t)||(u.push(t),o.push({id:e,url:n}))}}return o}export{c as coerceSpriteToArray};

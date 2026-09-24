@@ -1,0 +1,1 @@
+import{Uniform1f as e,Uniform1i as l,UniformColor as u}from"../uniform_binding-DC7gP6_C.js";const a=(o,r)=>({u_color:new u(o,r.u_color),u_overlay:new l(o,r.u_overlay),u_overlay_scale:new e(o,r.u_overlay_scale)}),f=(o,r=1)=>({u_color:o,u_overlay:0,u_overlay_scale:r});export{f as debugUniformValues,a as debugUniforms};

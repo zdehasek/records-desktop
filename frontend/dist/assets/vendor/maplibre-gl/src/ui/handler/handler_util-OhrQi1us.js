@@ -1,0 +1,1 @@
+function o(e,t){if(e.length!==t.length)throw new Error(`The number of touches and points are not equal - touches ${e.length}, points ${t.length}`);const r={};for(let n=0;n<e.length;n++)r[e[n].identifier]=t[n];return r}export{o as indexTouches};

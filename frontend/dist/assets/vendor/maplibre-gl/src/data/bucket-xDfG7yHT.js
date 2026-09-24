@@ -1,0 +1,1 @@
+function i(o,a){const r={};if(!a)return r;for(const e of o){const n=e.layerIds.map(t=>a.getLayer(t)).filter(Boolean);if(n.length!==0){e.layers=n,e.stateDependentLayerIds&&(e.stateDependentLayers=e.stateDependentLayerIds.map(t=>n.filter(s=>s.id===t)[0]));for(const t of n)r[t.id]=e}}return r}export{i as deserialize};

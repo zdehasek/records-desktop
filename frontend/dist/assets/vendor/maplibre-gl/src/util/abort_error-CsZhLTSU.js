@@ -1,0 +1,1 @@
+const n="AbortError";class c extends Error{constructor(o=n){super(o instanceof Error?o.message:o),this.name=n,o instanceof Error&&o.stack&&(this.stack=o.stack)}}function r(t){return t instanceof Error&&t.name===n}function i(t){if(t.aborted)throw new c(t.reason)}export{n as ABORT_ERROR,c as AbortError,r as isAbortError,i as throwIfAborted};
