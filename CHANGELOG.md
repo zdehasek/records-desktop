@@ -4,6 +4,11 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.10 - 2026-09-25
+
+- Exclude `otool`'s inspected-file header from Mach-O reference validation while
+  continuing to reject build-machine paths in dependencies and load commands.
+
 ## 0.1.9 - 2026-09-25
 
 - Fetch ImageMagick from its checksum-locked official GitHub tag archive when

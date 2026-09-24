@@ -22,6 +22,12 @@ function run(command, args, options = {}) {
   return `${result.stdout}${result.stderr}`
 }
 
+export function otoolBody(output, file) {
+  const [header, ...body] = output.split("\n")
+  if (header !== `${file}:`) fail(`${file}: unexpected otool output header`)
+  return body.join("\n")
+}
+
 function walk(directory, allowSymlinks = false) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const item = path.join(directory, entry.name)
@@ -94,8 +100,8 @@ function validateLock() {
 }
 
 function machoDetails(file) {
-  const linkage = run("otool", ["-L", file])
-  const loadCommands = run("otool", ["-l", file])
+  const linkage = otoolBody(run("otool", ["-L", file]), file)
+  const loadCommands = otoolBody(run("otool", ["-l", file]), file)
   const idResult = spawnSync("otool", ["-D", file], { encoding: "utf8" })
   const id =
     idResult.status === 0
@@ -107,7 +113,6 @@ function machoDetails(file) {
       : undefined
   const dependencies = linkage
     .split("\n")
-    .slice(1)
     .filter((line) => line.trim())
     .map((line) => line.trim().split(/\s+/)[0])
     .filter((dependency) => dependency !== id)

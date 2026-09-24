@@ -3,7 +3,7 @@ import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
 import test from "node:test"
-import { validateLicenses } from "../../scripts/vendor/validate.mjs"
+import { otoolBody, validateLicenses } from "../../scripts/vendor/validate.mjs"
 
 const root = path.resolve(import.meta.dirname, "../..")
 const lockPath = path.join(root, "vendor", "sources.lock.json")
@@ -23,4 +23,18 @@ test("staged vendor licenses match every locked component", (context) => {
   fs.copyFileSync(lockPath, path.join(stage, "sources.lock.json"))
 
   assert.doesNotThrow(() => validateLicenses(stage))
+})
+
+test("otool parser excludes the inspected file header", () => {
+  const file = "/Users/runner/work/records/vendor/mac-x64/bin/ffmpeg"
+  const dependency = "/usr/local/lib/libexample.dylib"
+
+  assert.equal(
+    otoolBody(`${file}:\n\t${dependency}\n`, file),
+    `\t${dependency}\n`
+  )
+  assert.throws(
+    () => otoolBody("different-file:\n", file),
+    /unexpected otool output header/
+  )
 })
