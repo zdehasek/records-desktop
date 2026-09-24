@@ -27,7 +27,15 @@ const textExtensions = new Set([
 const forbidden = [".dev/", ".opencode/", "node_modules/", "coverage/"]
 const listing = spawnSync(
   "git",
-  ["ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+  [
+    "-c",
+    `safe.directory=${root}`,
+    "ls-files",
+    "--cached",
+    "--others",
+    "--exclude-standard",
+    "-z"
+  ],
   { cwd: root, encoding: "buffer" }
 )
 if (listing.status !== 0) throw new Error(listing.stderr.toString())
