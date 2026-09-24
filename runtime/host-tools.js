@@ -47,7 +47,9 @@ export async function terminateActiveProcessTrees({ graceMs = 500 } = {}) {
 process.once("exit", terminateActiveProcessTreesSync)
 
 export function findCommand(name) {
-  for (const directory of (process.env.PATH || "").split(path.delimiter)) {
+  const directories = (process.env.PATH || "").split(path.delimiter)
+  if (process.platform === "linux") directories.push("/usr/bin/vendor_perl")
+  for (const directory of directories) {
     if (!directory) continue
     const candidate = path.join(directory, name)
     try {

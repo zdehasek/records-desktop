@@ -62,7 +62,15 @@ test("plugin contract and install-like tree validate without dependencies", asyn
   const staged = path.join(temporary, "plugin")
   const releaseFiles = spawnSync(
     "git",
-    ["ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+    [
+      "-c",
+      `safe.directory=${root}`,
+      "ls-files",
+      "--cached",
+      "--others",
+      "--exclude-standard",
+      "-z"
+    ],
     { cwd: root, encoding: "buffer" }
   )
   assert.equal(releaseFiles.status, 0, releaseFiles.stderr.toString())

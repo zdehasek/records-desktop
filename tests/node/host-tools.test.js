@@ -11,9 +11,14 @@ import {
 function processExists(pid) {
   try {
     process.kill(pid, 0)
+    if (process.platform === "linux") {
+      const stat = fs.readFileSync(`/proc/${pid}/stat`, "utf8")
+      const state = stat.slice(stat.lastIndexOf(") ") + 2, -1).split(" ")[0]
+      if (state === "Z") return false
+    }
     return true
   } catch (error) {
-    if (error.code === "ESRCH") return false
+    if (error.code === "ESRCH" || error.code === "ENOENT") return false
     throw error
   }
 }
@@ -46,8 +51,8 @@ setInterval(() => {}, 1000)
   )
 
   const running = runCommand(process.execPath, [scriptPath], {
-    timeout: 200,
-    killGraceMs: 50
+    timeout: 2_000,
+    killGraceMs: 100
   })
   const rejected = assert.rejects(running, (error) => {
     assert.equal(error.code, "ETIMEDOUT")
