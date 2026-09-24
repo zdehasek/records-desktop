@@ -4,6 +4,11 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.3 - 2026-09-24
+
+- Fix native macOS libheif configuration by excluding its unused TIFF helper
+  integration from the bundled decoder build.
+
 ## 0.1.2 - 2026-09-24
 
 - Add macOS 13 arm64/x64 Electron packaging configuration and native CI while

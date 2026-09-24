@@ -110,6 +110,7 @@ meson compile -C "$WORK/$ARCH/build-dav1d"
 meson install -C "$WORK/$ARCH/build-dav1d"
 
 cmake_build libheif ON \
+  -DCMAKE_DISABLE_FIND_PACKAGE_TIFF=TRUE \
   -DENABLE_PLUGIN_LOADING=OFF \
   -DWITH_LIBDE265=ON -DWITH_LIBDE265_PLUGIN=OFF \
   -DWITH_DAV1D=ON -DWITH_DAV1D_PLUGIN=OFF \
