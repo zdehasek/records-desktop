@@ -1,8 +1,11 @@
 import { PMTiles } from "pmtiles"
+import mapWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url"
 
 let active = null
 
 export function acquireMapProtocol(maplibregl, api) {
+  maplibregl.setWorkerUrl(mapWorkerUrl)
+
   if (!active) {
     const archive = new PMTiles(
       new URL("basemap.pmtiles", document.baseURI).href

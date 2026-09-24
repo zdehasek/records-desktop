@@ -223,6 +223,7 @@ test("all shell routes load without page errors", async ({ page }) => {
     await expect(page).toHaveTitle("Records - Production")
     await expect(page.locator("main")).toBeVisible()
     await expect(page).toHaveURL(new RegExp(`#${route}$`))
+    if (route === "map") await page.waitForTimeout(1_000)
   }
   expect(errors).toEqual([])
 })
