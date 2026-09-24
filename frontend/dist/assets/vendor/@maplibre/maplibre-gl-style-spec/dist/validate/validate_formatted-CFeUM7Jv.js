@@ -1,0 +1,1 @@
+import{validateExpression as t}from"./validate_expression-B6cd7Cpn.js";import{validateString as e}from"./validate_string-Cg2I9Dvf.js";function n(r){return e(r).length===0?[]:t(r)}export{n as validateFormatted};

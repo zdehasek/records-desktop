@@ -1,0 +1,1 @@
+import{StyleLayer as t}from"../style_layer-D9iBvw3E.js";import s from"./background_style_layer_properties.g-R0QLh8ea.js";const p=r=>r.type==="background";class y extends t{constructor(e,o){super(e,s,o)}}export{y as BackgroundStyleLayer,p as isBackgroundStyleLayer};

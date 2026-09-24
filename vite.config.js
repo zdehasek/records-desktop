@@ -5,6 +5,12 @@ import solid from "vite-plugin-solid"
 
 const root = path.dirname(fileURLToPath(import.meta.url))
 
+function bundleName(name) {
+  return name
+    .replace(/(^|\/)node_modules\//g, "$1vendor/")
+    .replace(/^frontend\//, "app/")
+}
+
 export default defineConfig({
   root: path.join(root, "frontend", "src"),
   base: "./",
@@ -37,10 +43,13 @@ export default defineConfig({
         preserveModules: true,
         preserveModulesRoot: root,
         entryFileNames: (chunk) => {
-          const name = chunk.name
-            .replace(/^node_modules\//, "vendor/")
-            .replace(/^frontend\//, "app/")
-          return `assets/${name}-[hash].js`
+          return `assets/${bundleName(chunk.name)}-[hash].js`
+        },
+        assetFileNames: (asset) => {
+          const name = bundleName(asset.names[0])
+          const extension = path.posix.extname(name)
+          const stem = extension ? name.slice(0, -extension.length) : name
+          return `assets/${stem}-[hash][extname]`
         }
       }
     }

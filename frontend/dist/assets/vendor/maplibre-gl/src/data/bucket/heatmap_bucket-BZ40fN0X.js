@@ -1,1 +1,0 @@
-import{CircleBucket as e}from"./circle_bucket-BbbEI9Gg.js";import{register as t}from"../../util/web_worker_transfer-DHcMK3TB.js";class r extends e{}t("HeatmapBucket",r,{omit:["layers"]});export{r as HeatmapBucket};

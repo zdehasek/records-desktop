@@ -1,1 +1,0 @@
-import{latest as e}from"../../../@maplibre/maplibre-gl-style-spec/dist/reference/latest-2BkH57Vr.js";import{Properties as r,DataConstantProperty as o}from"./properties-dz_uo7pu.js";let t;const n=()=>t=t||new r({type:new o(e.projection.type,"type")});export{n as getProperties};

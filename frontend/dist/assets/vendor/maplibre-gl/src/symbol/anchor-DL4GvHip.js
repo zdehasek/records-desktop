@@ -1,0 +1,1 @@
+import o from"../../../@mapbox/point-geometry/index-Dj8pS445.js";import{register as n}from"../util/web_worker_transfer-BEtaJxIc.js";class t extends o{constructor(r,s,i,e){super(r,s),this.angle=i,e!==void 0&&(this.segment=e)}clone(){return new t(this.x,this.y,this.angle,this.segment)}}n("Anchor",t);export{t as Anchor};
