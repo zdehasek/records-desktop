@@ -4,6 +4,11 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.8 - 2026-09-25
+
+- Isolate native dependency discovery from Homebrew and disable unused FFmpeg
+  and ImageMagick delegates that could leak build-machine libraries.
+
 ## 0.1.7 - 2026-09-25
 
 - Fix staged vendor license validation and cover it with a Linux regression

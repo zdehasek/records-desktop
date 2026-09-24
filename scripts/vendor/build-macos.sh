@@ -28,6 +28,7 @@ export CFLAGS="-O2 -mmacosx-version-min=$TARGET"
 export CXXFLAGS="$CFLAGS"
 export LDFLAGS="-mmacosx-version-min=$TARGET"
 export PKG_CONFIG_PATH="$PREFIX/lib/pkgconfig:$PREFIX/share/pkgconfig"
+export PKG_CONFIG_LIBDIR="$PKG_CONFIG_PATH"
 export PATH="$PREFIX/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH:-}"
 
 component_field() {
@@ -127,10 +128,10 @@ cmake_build libheif ON \
   -DWITH_GDK_PIXBUF=OFF -DWITH_EXAMPLES=OFF -DBUILD_TESTING=OFF
 
 IM=$(extract_source imagemagick)
-(cd "$IM" && ./configure --prefix="$PREFIX" --disable-shared --enable-static --without-modules --without-x --without-gslib --without-djvu --without-fftw --without-fontconfig --without-freetype --without-lcms --without-openjp2 --without-raw --without-xml && make -j"$JOBS" && make install)
+(cd "$IM" && ./configure --prefix="$PREFIX" --disable-shared --enable-static --without-modules --without-x --without-gslib --without-bzlib --without-djvu --without-fftw --without-fontconfig --without-freetype --without-lcms --without-lzma --without-openjp2 --without-raw --without-xml --without-zip --without-zlib --without-zstd && make -j"$JOBS" && make install)
 
 FFMPEG=$(extract_source ffmpeg)
-(cd "$FFMPEG" && ./configure --prefix="$PREFIX" --pkg-config-flags=--static --extra-cflags="-I$PREFIX/include" --extra-ldflags="-L$PREFIX/lib" --enable-gpl --enable-libx264 --enable-videotoolbox --disable-shared --enable-static --disable-doc --disable-debug --disable-ffplay --disable-network && make -j"$JOBS" && make install)
+(cd "$FFMPEG" && ./configure --prefix="$PREFIX" --pkg-config-flags=--static --extra-cflags="-I$PREFIX/include" --extra-ldflags="-L$PREFIX/lib" --disable-autodetect --enable-gpl --enable-libx264 --enable-videotoolbox --disable-shared --enable-static --disable-doc --disable-debug --disable-ffplay --disable-network && make -j"$JOBS" && make install)
 
 PERL=$(extract_source perl)
 (cd "$PERL" && ./Configure -des -Dprefix="$PREFIX/perl" -Duserelocatableinc -Duseshrplib=false -Duseithreads=false -Dman1dir=none -Dman3dir=none && make -j"$JOBS" && make install)

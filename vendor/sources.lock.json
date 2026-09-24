@@ -30,6 +30,7 @@
         "--enable-gpl",
         "--enable-libx264",
         "--enable-videotoolbox",
+        "--disable-autodetect",
         "--disable-shared",
         "--enable-static"
       ]
@@ -139,7 +140,12 @@
         "--enable-static",
         "--without-modules",
         "--without-x",
-        "--without-gslib"
+        "--without-gslib",
+        "--without-bzlib",
+        "--without-lzma",
+        "--without-zip",
+        "--without-zlib",
+        "--without-zstd"
       ]
     },
     {
