@@ -14,7 +14,7 @@ jobs:
     container: archlinux:latest
     steps:
       - name: Install system dependencies
-        run: pacman -Syu --noconfirm git nodejs npm chromium ffmpeg imagemagick perl-image-exiftool glib2
+        run: pacman -Syu --noconfirm git nodejs-lts-jod npm chromium ffmpeg imagemagick perl-image-exiftool glib2
       - uses: actions/checkout@v4
       - run: npm ci
       - run: npm run check:static
