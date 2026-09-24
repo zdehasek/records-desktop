@@ -4,6 +4,11 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.9 - 2026-09-25
+
+- Fetch ImageMagick from its checksum-locked official GitHub tag archive when
+  rebuilding the macOS runtime.
+
 ## 0.1.8 - 2026-09-25
 
 - Isolate native dependency discovery from Homebrew and disable unused FFmpeg

@@ -130,8 +130,8 @@
     {
       "name": "imagemagick",
       "version": "7.1.2-31",
-      "url": "https://download.imagemagick.org/archive/releases/ImageMagick-7.1.2-31.tar.xz",
-      "sha256": "894e3dfc3312151bba15ed1838e8066302940972d100a1727dfac5d16dd769e1",
+      "url": "https://github.com/ImageMagick/ImageMagick/archive/refs/tags/7.1.2-31.tar.gz",
+      "sha256": "34d9cc3acddc3e3c429d23af60eda5ceaac477a8b296ddb9469f773f44a80a5f",
       "directory": "ImageMagick-7.1.2-31",
       "license": "ImageMagick",
       "licenseFiles": ["LICENSE"],
