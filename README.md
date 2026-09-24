@@ -3,6 +3,8 @@
 Records is a private, local-first photo and video diary. This repository
 packages its SolidJS interface as an Omarchy shell plugin. The shell owns one
 Node.js backend and opens the interface in an isolated Chromium app window.
+The same frontend and backend are also packaged as a self-contained macOS
+Electron application.
 
 ![Records timeline](preview.webp)
 
@@ -29,6 +31,41 @@ Built frontend assets are committed under
 modules under `runtime/vendor/`.
 
 ## Install
+
+### macOS
+
+Records for macOS requires macOS 13 or newer. Releases provide separate native
+artifacts named `Records-<version>-mac-arm64.dmg` for Apple silicon and
+`Records-<version>-mac-x64.dmg` for Intel Macs, with equivalent ZIP archives.
+Open the DMG and drag Records to Applications. The application bundles FFmpeg,
+FFprobe, ImageMagick, Perl, and ExifTool; packaged production does not use
+Homebrew, MacPorts, or media tools from `PATH`.
+
+Each binary release also includes `Records-<version>-corresponding-source.tar.gz`
+for the bundled GPL FFmpeg/x264 programs and replaceable LGPL libheif/libde265
+libraries, plus a SHA-256 manifest. The source archive includes dav1d and the
+complete rebuild, relocation, and replacement materials. These files are
+published beside the DMG and ZIP, not embedded in the application.
+
+Ordinary CI builds are intentionally unsigned. To test one, verify its checksum
+and provenance first, move it to Applications, then remove quarantine locally:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Records.app
+```
+
+Do not bypass Gatekeeper for an artifact you do not trust. Tagged builds are
+signed and notarized only when the repository's complete signing secret set is
+available.
+
+macOS configuration and durable application data live under
+`~/Library/Application Support/records`; disposable indexes, thumbnails, and
+map data live under `~/Library/Caches/records`. Profile-separated Electron
+session data lives under
+`~/Library/Application Support/records/electron/session`. Configured media
+folders remain external and are never copied into any of these locations.
+
+### Omarchy
 
 Install the required host packages on Omarchy:
 
@@ -186,6 +223,24 @@ downgrade, restore those backups and install the earlier Git tag.
 
 ## Remove
 
+### macOS
+
+Quit Records, remove `Records.app`, and optionally delete the application-owned
+data and caches:
+
+```text
+~/Library/Application Support/records/
+~/Library/Caches/records/
+```
+
+The Application Support directory includes configuration, durable duplicate
+choices, and profile-separated Electron browser state. The Caches directory is
+regenerable. Back up any configuration and duplicate choices you want to keep.
+Never delete a configured external media folder as part of uninstalling
+Records.
+
+### Omarchy
+
 Disable and remove the plugin checkout without touching media or Records data:
 
 ```bash
@@ -304,7 +359,8 @@ npm run check
 npm run test:all
 ```
 
-`npm run build` updates the committed bundle. `npm run check` verifies Prettier,
+`npm run build` updates the committed bundle. `npm run build:omarchy` is the
+explicit Omarchy build alias. `npm run check` verifies Prettier,
 ESLint, unused imports, relative imports, Knip dead-code analysis, and Node tests.
 `npm run test:all` requires runtime source-only coverage of 80% for statements,
 lines, branches, and functions, with zero CRAP threshold failures.
@@ -329,6 +385,12 @@ changing `yaml`, `chokidar`, or their runtime integration so `runtime/vendor/`
 stays current. Never import QtWebEngine into the Omarchy shell; Chromium
 isolation prevents renderer failures from crashing Quickshell.
 
+On native macOS, `npm run vendor:build:mac` fetches checksum-locked official
+sources and builds the media toolchain for the current architecture and macOS
+13 deployment target. Then use `npm run build:mac` and either
+`npm run dist:mac:arm64` or `npm run dist:mac:x64`. Native source and build
+outputs are ignored; no generated vendor binary is committed.
+
 For isolated backend testing, set all three XDG homes and use the profile
 bootstrap:
 
@@ -351,8 +413,9 @@ node --no-warnings runtime/bootstrap.js
 - `frontend/dist/` contains install-ready assets.
 
 Records excludes cloud accounts, subscriptions, calendar synchronization,
-mobile wrappers, Electron, and application-level auto-updating. Omarchy's
-plugin manager handles plugin updates. Printing/PDF export and automatic
+mobile wrappers, and application-level auto-updating. Omarchy's plugin manager
+handles plugin updates. The macOS edition uses Electron only as its native host.
+Printing/PDF export and automatic
 relocation of media imported by Records Desktop are not currently implemented.
 
 ## License

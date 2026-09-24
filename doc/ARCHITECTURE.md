@@ -1,6 +1,8 @@
 # Architecture
 
-Records is an Omarchy shell plugin with three process boundaries.
+Records has Omarchy and macOS hosts around one backend and SolidJS frontend.
+
+The Omarchy process boundaries are:
 
 1. Quickshell loads one `Service.qml` instance.
 2. That service starts a dependency-free Node.js 22 profile bootstrap and backend.
@@ -8,6 +10,13 @@ Records is an Omarchy shell plugin with three process boundaries.
 
 QtWebEngine never runs inside Quickshell. A Chromium renderer failure therefore
 cannot terminate the shell, notification service, or bar.
+
+On macOS, Electron's main process supervises the backend as a separate child and
+loads the same authenticated loopback origin in a sandboxed renderer. The
+renderer has no Node integration or general-purpose preload bridge. Native
+dialogs, Trash, file reveal/open, and notifications cross a fixed, validated IPC
+protocol. The packaged backend uses application resources only and receives a
+sanitized `PATH`.
 
 ## Backend
 
@@ -73,11 +82,35 @@ Each profile config stores a set of non-overlapping media roots and the immutabl
 name of one enabled default root. Every enabled root is scanned recursively in
 place. Media added by the application is written under
 `<default-root>/records/YYYY/MM/DD/` and uses that parent root's identity.
-Durable duplicate choices and Chromium state use the profile namespace in the
-data home. A pending profile switch becomes active only after the candidate
-backend reaches readiness. Only config version 4 and its current fields are
-accepted. Obsolete versions or fields fail without migration, rewriting, or
-compatibility accessors.
+Durable duplicate choices use the profile namespace in the data home. Electron
+uses persistent per-profile partitions beneath `records/electron/session`; the
+Omarchy Chromium host retains its own isolated profile behavior. A pending
+profile switch becomes active only after the candidate backend reaches
+readiness. Only config version 4 and its current fields are accepted. Obsolete
+versions or fields fail without migration, rewriting, or compatibility
+accessors.
+
+The macOS launcher maps the same XDG-based storage model beneath
+`~/Library/Application Support/records`, explicitly places Electron `userData`
+under `records/electron` and `sessionData` under `records/electron/session`, and
+places caches beneath `~/Library/Caches/records`. Omarchy retains its normal XDG
+locations.
+
+## Native Vendor Tree
+
+`vendor/sources.lock.json` pins official source URLs and SHA-256 digests for
+FFmpeg, x264, ImageMagick and its image delegates, Perl, and ExifTool. Native
+macOS runners build one architecture with a macOS 13 deployment target and stage
+it under ignored `vendor/mac-<arch>/`. Package validation checks required files,
+tool features, executable architecture, recursive Mach-O dependencies/rpaths,
+and operation with a system-only sanitized `PATH`.
+
+FFmpeg is GPL-enabled for libx264. ImageMagick loads libheif and libde265 as
+replaceable LGPL shared libraries through bundle-relative Mach-O paths; only
+`magick` disables hardened-runtime library validation. Release artifacts include
+the applicable notices and a corresponding-source archive containing pristine
+FFmpeg, x264, libheif, libde265, and dav1d archives, the exact lock, complete
+build/relocation/replacement scripts, and a toolchain record.
 
 Photo editable fields live in XMP/EXIF/IPTC metadata; XMP
 `PresentationColor` is only the image encoding of `note_style.color`. Video

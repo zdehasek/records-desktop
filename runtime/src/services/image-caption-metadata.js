@@ -1,7 +1,13 @@
 import { createHash, randomUUID } from "node:crypto"
 import fs from "node:fs"
 import path from "node:path"
-import { findCommand, runCommand } from "../../host-tools.js"
+import { runCommand } from "../../host-tools.js"
+import {
+  resolveMediaTool,
+  toolArgs,
+  toolCommand,
+  toolOptions
+} from "../../media-tools.js"
 import { normalizeNoteColor } from "../../media-metadata.js"
 
 const CAPTION_TAGS = [
@@ -249,9 +255,17 @@ function sameFile(before, after) {
 
 export function createImageCaptionMetadata(options = {}) {
   const exiftool =
-    options.exiftool === undefined ? findCommand("exiftool") : options.exiftool
+    options.exiftool === undefined
+      ? resolveMediaTool("exiftool")
+      : typeof options.exiftool === "string"
+        ? { command: options.exiftool, args: [] }
+        : options.exiftool
   const magick =
-    options.magick === undefined ? findCommand("magick") : options.magick
+    options.magick === undefined
+      ? resolveMediaTool("magick")
+      : typeof options.magick === "string"
+        ? { command: options.magick, args: [] }
+        : options.magick
   const run = options.runCommand || runCommand
   const calculateChecksum = options.checksum || checksum
 
@@ -264,17 +278,21 @@ export function createImageCaptionMetadata(options = {}) {
   async function read(filePath) {
     if (!exiftool)
       throw new Error("ExifTool is required to read photo captions")
-    const { stdout } = await run(exiftool, [
-      "-config",
-      EXIFTOOL_CONFIG,
-      "-j",
-      "-G1",
-      "-s",
-      "-struct",
-      "-n",
-      ...METADATA_TAGS.map((tag) => `-${tag}`),
-      filePath
-    ])
+    const { stdout } = await run(
+      toolCommand(exiftool),
+      toolArgs(exiftool, [
+        "-config",
+        EXIFTOOL_CONFIG,
+        "-j",
+        "-G1",
+        "-s",
+        "-struct",
+        "-n",
+        ...METADATA_TAGS.map((tag) => `-${tag}`),
+        filePath
+      ]),
+      toolOptions(exiftool)
+    )
     return parseExiftoolJson(stdout)
   }
 
@@ -282,13 +300,18 @@ export function createImageCaptionMetadata(options = {}) {
     if (!magick) {
       throw new Error("ImageMagick is required to verify photo pixels")
     }
-    const { stdout } = await run(magick, [
-      "identify",
+    const args = [
       "-quiet",
       "-format",
       "%m\u001f%w\u001f%h\u001f%[scene]\u001f%[signature]\u001e",
       filePath
-    ])
+    ]
+    if (!magick.operations?.identify) args.unshift("identify")
+    const { stdout } = await run(
+      toolCommand(magick, "identify"),
+      toolArgs(magick, args, "identify"),
+      toolOptions(magick)
+    )
     const result = imageSignatures(stdout)
     if (!result.length) throw new Error("Photo verification produced no frames")
     return result
@@ -493,7 +516,11 @@ export function createImageCaptionMetadata(options = {}) {
       ) {
         fs.chownSync(stagingPath, original.uid, original.gid)
       }
-      await run(exiftool, [...writeArgs(patch), stagingPath])
+      await run(
+        toolCommand(exiftool),
+        toolArgs(exiftool, [...writeArgs(patch), stagingPath]),
+        toolOptions(exiftool)
+      )
 
       const embedded = await read(stagingPath)
       verifyPatch(patch, embedded)

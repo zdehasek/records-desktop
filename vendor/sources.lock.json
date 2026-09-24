@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "deploymentTarget": "13.0",
+  "components": [
+    {
+      "name": "x264",
+      "version": "b35605ace3ddf7c1a5d67a2eb553f034aef41d55",
+      "url": "https://code.videolan.org/videolan/x264/-/archive/b35605ace3ddf7c1a5d67a2eb553f034aef41d55/x264-b35605ace3ddf7c1a5d67a2eb553f034aef41d55.tar.gz",
+      "sha256": "cd71a7515b0e9a012e1ac9b1f8415bebcaf6fc97d4db32286642ac4c0fbe24f9",
+      "directory": "x264-b35605ace3ddf7c1a5d67a2eb553f034aef41d55",
+      "license": "GPL-2.0-or-later",
+      "licenseFiles": ["COPYING"],
+      "buildOptions": ["--enable-static", "--disable-cli", "--disable-opencl"]
+    },
+    {
+      "name": "ffmpeg",
+      "version": "7.1.5",
+      "url": "https://ffmpeg.org/releases/ffmpeg-7.1.5.tar.xz",
+      "sha256": "de668509caf9e35e3cd162473441fdb29538c6d96ed080292b3cf9e6fc5d558f",
+      "directory": "ffmpeg-7.1.5",
+      "license": "GPL-2.0-or-later",
+      "licenseFiles": [
+        "COPYING.GPLv2",
+        "COPYING.GPLv3",
+        "COPYING.LGPLv2.1",
+        "COPYING.LGPLv3",
+        "LICENSE.md"
+      ],
+      "buildOptions": [
+        "--enable-gpl",
+        "--enable-libx264",
+        "--enable-videotoolbox",
+        "--disable-shared",
+        "--enable-static"
+      ]
+    },
+    {
+      "name": "libjpeg-turbo",
+      "version": "3.1.2",
+      "url": "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.1.2/libjpeg-turbo-3.1.2.tar.gz",
+      "sha256": "8f0012234b464ce50890c490f18194f913a7b1f4e6a03d6644179fa0f867d0cf",
+      "directory": "libjpeg-turbo-3.1.2",
+      "license": "IJG AND BSD-3-Clause AND Zlib",
+      "licenseFiles": ["LICENSE.md"],
+      "buildOptions": ["ENABLE_SHARED=OFF", "WITH_TURBOJPEG=OFF"]
+    },
+    {
+      "name": "libpng",
+      "version": "1.6.50",
+      "url": "https://download.sourceforge.net/libpng/libpng-1.6.50.tar.xz",
+      "sha256": "4df396518620a7aa3651443e87d1b2862e4e88cad135a8b93423e01706232307",
+      "directory": "libpng-1.6.50",
+      "license": "libpng-2.0",
+      "licenseFiles": ["LICENSE"],
+      "buildOptions": ["PNG_SHARED=OFF", "PNG_TESTS=OFF"]
+    },
+    {
+      "name": "libtiff",
+      "version": "4.7.1",
+      "url": "https://download.osgeo.org/libtiff/tiff-4.7.1.tar.xz",
+      "sha256": "b92017489bdc1db3a4c97191aa4b75366673cb746de0dce5d7a749d5954681ba",
+      "directory": "tiff-4.7.1",
+      "license": "libtiff",
+      "licenseFiles": ["LICENSE.md"],
+      "buildOptions": ["tiff-tools=OFF", "tiff-tests=OFF", "tiff-contrib=OFF"]
+    },
+    {
+      "name": "libwebp",
+      "version": "1.6.0",
+      "url": "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.6.0.tar.gz",
+      "sha256": "e4ab7009bf0629fd11982d4c2aa83964cf244cffba7347ecd39019a9e38c4564",
+      "directory": "libwebp-1.6.0",
+      "license": "BSD-3-Clause",
+      "licenseFiles": ["COPYING"],
+      "buildOptions": ["BUILD_SHARED_LIBS=OFF", "WEBP_BUILD_EXTRAS=OFF"]
+    },
+    {
+      "name": "libde265",
+      "version": "1.0.16",
+      "url": "https://github.com/strukturag/libde265/releases/download/v1.0.16/libde265-1.0.16.tar.gz",
+      "sha256": "b92beb6b53c346db9a8fae968d686ab706240099cdd5aff87777362d668b0de7",
+      "directory": "libde265-1.0.16",
+      "license": "LGPL-3.0-or-later",
+      "licenseFiles": ["COPYING"],
+      "buildOptions": [
+        "BUILD_SHARED_LIBS=ON",
+        "ENABLE_SDL=OFF",
+        "ENABLE_DEC265=OFF",
+        "ENABLE_ENCODER=OFF"
+      ]
+    },
+    {
+      "name": "dav1d",
+      "version": "1.5.1",
+      "url": "https://code.videolan.org/videolan/dav1d/-/archive/1.5.1/dav1d-1.5.1.tar.gz",
+      "sha256": "fa635e2bdb25147b1384007c83e15de44c589582bb3b9a53fc1579cb9d74b695",
+      "directory": "dav1d-1.5.1",
+      "license": "BSD-2-Clause",
+      "licenseFiles": ["COPYING"],
+      "buildOptions": [
+        "default_library=static",
+        "enable_tools=false",
+        "enable_tests=false"
+      ]
+    },
+    {
+      "name": "libheif",
+      "version": "1.20.2",
+      "url": "https://github.com/strukturag/libheif/releases/download/v1.20.2/libheif-1.20.2.tar.gz",
+      "sha256": "68ac9084243004e0ef3633f184eeae85d615fe7e4444373a0a21cebccae9d12a",
+      "directory": "libheif-1.20.2",
+      "license": "LGPL-3.0-or-later",
+      "licenseFiles": ["COPYING"],
+      "buildOptions": [
+        "BUILD_SHARED_LIBS=ON",
+        "ENABLE_PLUGIN_LOADING=OFF",
+        "WITH_LIBDE265=ON",
+        "WITH_DAV1D=ON",
+        "WITH_X265=OFF",
+        "WITH_AOM_DECODER=OFF",
+        "WITH_AOM_ENCODER=OFF",
+        "WITH_EXAMPLES=OFF"
+      ]
+    },
+    {
+      "name": "imagemagick",
+      "version": "7.1.2-31",
+      "url": "https://download.imagemagick.org/archive/releases/ImageMagick-7.1.2-31.tar.xz",
+      "sha256": "894e3dfc3312151bba15ed1838e8066302940972d100a1727dfac5d16dd769e1",
+      "directory": "ImageMagick-7.1.2-31",
+      "license": "ImageMagick",
+      "licenseFiles": ["LICENSE"],
+      "buildOptions": [
+        "--disable-shared",
+        "--enable-static",
+        "--without-modules",
+        "--without-x",
+        "--without-gslib"
+      ]
+    },
+    {
+      "name": "perl",
+      "version": "5.42.0",
+      "url": "https://www.cpan.org/src/5.0/perl-5.42.0.tar.xz",
+      "sha256": "73cf6cc1ea2b2b1c110a18c14bbbc73a362073003893ffcedc26d22ebdbdd0c3",
+      "directory": "perl-5.42.0",
+      "license": "Artistic-1.0-Perl OR GPL-1.0-or-later",
+      "licenseFiles": ["Artistic", "Copying"],
+      "buildOptions": [
+        "-des",
+        "-Duserelocatableinc",
+        "-Duseshrplib=false",
+        "-Duseithreads=false"
+      ]
+    },
+    {
+      "name": "exiftool",
+      "version": "13.59",
+      "url": "https://sourceforge.net/projects/exiftool/files/Image-ExifTool-13.59.tar.gz/download",
+      "sha256": "668ea3acececb7235fbd0f4900e72d5f12c9b07e5c778fd36cb1e9b5828fd65a",
+      "directory": "Image-ExifTool-13.59",
+      "license": "Artistic-1.0-Perl OR GPL-1.0-or-later",
+      "licenseFiles": ["README"],
+      "buildOptions": ["invoke with bundled Perl"]
+    }
+  ],
+  "expectedStage": [
+    "bin/ffmpeg",
+    "bin/ffprobe",
+    "bin/magick",
+    "lib/libde265.dylib",
+    "lib/libheif.dylib",
+    "perl/bin/perl",
+    "exiftool/exiftool",
+    "exiftool/lib/Image/ExifTool.pm",
+    "etc/ImageMagick-7/policy.xml",
+    "licenses",
+    "sources.lock.json",
+    "build-info.json",
+    "ffmpeg-buildconf.txt"
+  ]
+}

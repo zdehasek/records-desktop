@@ -9,3 +9,7 @@ playwright-report/
 screenshots/
 *.sqlite3
 package-lock.json
+vendor/mac-arm64/
+vendor/mac-x64/
+vendor/corresponding-source/
+dist-electron/

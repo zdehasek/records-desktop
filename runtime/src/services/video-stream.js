@@ -3,8 +3,13 @@ import fsp from "fs/promises"
 import path from "path"
 
 import { runCommand } from "../../host-tools.js"
+import {
+  requireMediaTool,
+  toolArgs,
+  toolCommand,
+  toolOptions
+} from "../../media-tools.js"
 import { createLogger } from "../logger.js"
-import { ffmpegPath, ffprobePath } from "./ffmpeg-binaries.js"
 import { mediaCacheKey } from "./media-cache-key.js"
 
 const log = createLogger("video-stream")
@@ -13,6 +18,8 @@ const pending = new Map()
 const sourceGenerations = new Map()
 const MP4_AUDIO_CODECS = new Set(["aac", "mp3", "mp4a"])
 const H264_ENCODERS = ["libx264", "libopenh264"]
+const ffmpeg = () => requireMediaTool("ffmpeg")
+const ffprobe = () => requireMediaTool("ffprobe")
 
 let encoderSetPromise = null
 let cacheGeneration = 0
@@ -28,9 +35,10 @@ async function execFilePromise(file, args, options = {}) {
 }
 
 async function probeStreams(filePath) {
+  const tool = ffprobe()
   const stdout = await execFilePromise(
-    ffprobePath(),
-    [
+    toolCommand(tool),
+    toolArgs(tool, [
       "-v",
       "error",
       "-show_entries",
@@ -38,8 +46,8 @@ async function probeStreams(filePath) {
       "-of",
       "json",
       filePath
-    ],
-    { maxBuffer: 1024 * 1024 }
+    ]),
+    toolOptions(tool, { maxBuffer: 1024 * 1024 })
   )
   return JSON.parse(stdout)?.streams || []
 }
@@ -95,18 +103,24 @@ async function removeSourceCacheFiles(cacheDir, sourceId, keepPath = null) {
 }
 
 async function runFfmpeg(args) {
-  await execFilePromise(ffmpegPath(), args, {
-    timeout: 10 * 60 * 1000,
-    maxBuffer: 10 * 1024 * 1024
-  })
+  const tool = ffmpeg()
+  await execFilePromise(
+    toolCommand(tool),
+    toolArgs(tool, args),
+    toolOptions(tool, {
+      timeout: 10 * 60 * 1000,
+      maxBuffer: 10 * 1024 * 1024
+    })
+  )
 }
 
 async function availableEncoders() {
   if (!encoderSetPromise) {
+    const tool = ffmpeg()
     encoderSetPromise = execFilePromise(
-      ffmpegPath(),
-      ["-hide_banner", "-encoders"],
-      { maxBuffer: 1024 * 1024 }
+      toolCommand(tool),
+      toolArgs(tool, ["-hide_banner", "-encoders"]),
+      toolOptions(tool, { maxBuffer: 1024 * 1024 })
     ).then((stdout) => {
       const encoders = new Set()
       for (const line of stdout.split("\n")) {

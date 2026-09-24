@@ -94,7 +94,7 @@ test("plugin contract and install-like tree validate without dependencies", asyn
   }
 
   const child = spawn(
-    "/usr/bin/node",
+    process.execPath,
     ["--no-warnings", "runtime/bootstrap.js"],
     {
       cwd: staged,

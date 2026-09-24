@@ -3,6 +3,9 @@ import path from "node:path"
 
 const root = path.resolve(import.meta.dirname, "..")
 const lock = JSON.parse(fs.readFileSync(path.join(root, "package-lock.json")))
+const nativeLock = JSON.parse(
+  fs.readFileSync(path.join(root, "vendor", "sources.lock.json"))
+)
 const fallback = {
   "@protomaps/basemaps": `Copyright 2019-2023 Protomaps LLC, Kelso Cartography
 
@@ -58,6 +61,18 @@ const output = [
   "# Third-Party Notices",
   "",
   "Records distributes compiled or vendored portions of the packages below. Their licenses follow. Map data is attributed to OpenStreetMap contributors in the interface; Protomaps supplies the basemap style, tiles, and glyphs.",
+  "",
+  "## macOS native media components",
+  "",
+  "The self-contained macOS application additionally bundles these source-built components:",
+  "",
+  ...nativeLock.components.map(
+    ({ name, version, license }) => `- ${name} ${version} (${license})`
+  ),
+  "",
+  "Exact official source URLs, SHA-256 values, and build options are recorded in `vendor/sources.lock.json`. Distributions also carry each upstream license in the native resource tree.",
+  "",
+  "The bundled FFmpeg is GPL-enabled and linked with GPL x264. libheif and libde265 are shipped as replaceable LGPL shared libraries. Binary releases are accompanied by a `Records-<version>-corresponding-source.tar.gz` archive containing the exact FFmpeg, x264, libheif, libde265, and dav1d sources plus complete rebuild and relocation-validation materials. Release maintainers must retain that archive beside each binary release. This distribution choice does not change the license of unrelated Records source files.",
   "",
   ...notices.flatMap(({ name, version, text }) => [
     `## ${name} ${version}`,

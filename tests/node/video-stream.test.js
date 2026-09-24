@@ -280,7 +280,9 @@ test("real stream generation retains decodable embedded audio", async (context) 
   const source = path.join(directory, "tone.mp4")
   context.after(() => fs.rmSync(directory, { recursive: true, force: true }))
 
-  execFileSync("/usr/bin/ffmpeg", [
+  const realFfmpeg = process.env.REC_FFMPEG_PATH || "/usr/bin/ffmpeg"
+  const realFfprobe = process.env.REC_FFPROBE_PATH || "/usr/bin/ffprobe"
+  execFileSync(realFfmpeg, [
     "-hide_banner",
     "-loglevel",
     "error",
@@ -311,7 +313,7 @@ test("real stream generation retains decodable embedded audio", async (context) 
   })
   const probe = JSON.parse(
     execFileSync(
-      "/usr/bin/ffprobe",
+      realFfprobe,
       [
         "-v",
         "error",
@@ -329,7 +331,7 @@ test("real stream generation retains decodable embedded audio", async (context) 
     new Set(["video", "audio"])
   )
 
-  const pcm = execFileSync("/usr/bin/ffmpeg", [
+  const pcm = execFileSync(realFfmpeg, [
     "-hide_banner",
     "-loglevel",
     "error",

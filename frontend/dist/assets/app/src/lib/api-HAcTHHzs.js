@@ -1,1 +1,0 @@
-import{createRecordsApi as r}from"./platform/records-api-Dv-bgl1L.js";const t=r();let i=null;function e(){return t}async function o(){return i||(i=t.system.capabilities().then(n=>(Object.assign(t.capabilities,n),t))),i}function l(){try{return e()}catch{return null}}export{l as getOptionalPlatformApi,e as getPlatformApi,o as initializePlatformApi};

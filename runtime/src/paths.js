@@ -1,21 +1,17 @@
 import fs from "node:fs"
-import {
-  activeProfileId,
-  profileCacheDirectory,
-  profileConfigDirectory,
-  profileDataDirectory
-} from "./profiles.js"
+import { activeProfileId } from "./profiles.js"
+import { platform } from "../platform.js"
 
 export function recordsConfigDirectory() {
-  return profileConfigDirectory(activeProfileId())
+  return platform.configDirectory(activeProfileId())
 }
 
 export function recordsDataDirectory() {
-  return profileDataDirectory(activeProfileId())
+  return platform.dataDirectory(activeProfileId())
 }
 
 export function recordsCacheDirectory() {
-  return profileCacheDirectory(activeProfileId())
+  return platform.cacheDirectory(activeProfileId())
 }
 
 export function ensurePrivateDirectory(directory) {

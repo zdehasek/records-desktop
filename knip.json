@@ -4,16 +4,20 @@
     "runtime/launch.js",
     "runtime/bootstrap.js",
     "runtime/server.js",
+    "runtime/src/services/ffmpeg-binaries.js",
     "scripts/*.mjs",
+    "scripts/vendor/*.mjs",
     "tests/**/*.test.js"
   ],
   "project": [
     "frontend/src/**/*.{js,jsx}",
     "runtime/**/*.{js,cjs}",
     "scripts/*.mjs",
+    "scripts/vendor/*.mjs",
+    "desktop/electron/**/*.{js,cjs}",
     "tests/**/*.js"
   ],
-  "ignoreDependencies": ["chokidar"],
+  "ignoreDependencies": ["chokidar", "electron-builder"],
   "ignoreExportsUsedInFile": true,
-  "ignoreBinaries": ["chromium", "magick", "omarchy"]
+  "ignoreBinaries": ["chromium", "magick", "omarchy", "otool"]
 }

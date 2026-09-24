@@ -1,9 +1,14 @@
 import path from "node:path"
-import { findCommand, runCommand } from "./host-tools.js"
+import { runCommand } from "./host-tools.js"
+import {
+  resolveMediaTool,
+  toolArgs,
+  toolCommand,
+  toolOptions
+} from "./media-tools.js"
 
-const magick = findCommand("magick")
-const identify = findCommand("identify")
-const ffprobe = findCommand("ffprobe")
+const magick = resolveMediaTool("magick")
+const ffprobe = resolveMediaTool("ffprobe")
 
 function rational(value) {
   const parts = String(value || "")
@@ -132,15 +137,19 @@ async function probeVideo(filePath) {
     )
   }
   try {
-    const { stdout } = await runCommand(ffprobe, [
-      "-v",
-      "quiet",
-      "-print_format",
-      "json",
-      "-show_format",
-      "-show_streams",
-      filePath
-    ])
+    const { stdout } = await runCommand(
+      toolCommand(ffprobe),
+      toolArgs(ffprobe, [
+        "-v",
+        "quiet",
+        "-print_format",
+        "json",
+        "-show_format",
+        "-show_streams",
+        filePath
+      ]),
+      toolOptions(ffprobe)
+    )
     return JSON.parse(stdout)
   } catch (error) {
     throw new UnsupportedMediaError("File could not be verified as video", {
@@ -264,10 +273,13 @@ async function readImageMetadata(filePath, captionMetadata) {
     "%[EXIF:GPSLongitude]",
     "%[EXIF:GPSLongitudeRef]"
   ].join("\u001f")
-  const command = magick || identify
   const args = ["-quiet", "-format", format, `${filePath}[0]`]
-  if (magick) args.unshift("identify")
-  const { stdout } = await runCommand(command, args)
+  if (!magick.operations?.identify) args.unshift("identify")
+  const { stdout } = await runCommand(
+    toolCommand(magick, "identify"),
+    toolArgs(magick, args, "identify"),
+    toolOptions(magick)
+  )
   const [date, make, model, rawLat, latRef, rawLon, lonRef] =
     stdout.split("\u001f")
   let latitude = rational(rawLat)
@@ -287,7 +299,7 @@ export async function readMediaMetadata(filePath, options = {}) {
   if (VIDEO_EXTENSIONS.test(extension)) {
     return readVideoMetadata(filePath)
   }
-  if (!magick && !identify) {
+  if (!magick) {
     throw new Error("ImageMagick is required to read image metadata")
   }
   return readImageMetadata(filePath, options.captionMetadata)

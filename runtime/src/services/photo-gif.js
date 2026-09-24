@@ -2,8 +2,13 @@ import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
 import { runCommand } from "../../host-tools.js"
+import {
+  requireMediaTool,
+  toolArgs,
+  toolCommand,
+  toolOptions
+} from "../../media-tools.js"
 import { canonicalFileReference, resolveRootPath } from "../file-roots.js"
-import { ffmpegPath } from "./ffmpeg-binaries.js"
 import {
   cleanupImportDirectories,
   prepareDatedImportDirectory
@@ -35,7 +40,16 @@ async function renderGif(items, outputPath, options) {
     "0",
     outputPath
   )
-  await (options.execFile || runCommand)(options.ffmpeg || ffmpegPath(), args)
+  const tool = options.ffmpeg
+    ? typeof options.ffmpeg === "string"
+      ? { command: options.ffmpeg, args: [] }
+      : options.ffmpeg
+    : requireMediaTool("ffmpeg")
+  await (options.execFile || runCommand)(
+    toolCommand(tool),
+    toolArgs(tool, args),
+    toolOptions(tool)
+  )
 }
 
 function selectedImage(db, config, selection) {

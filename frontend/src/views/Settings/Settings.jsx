@@ -32,6 +32,7 @@ export default function Settings() {
   const missingSystemPackages = () => capabilities().missingSystemPackages || []
   const missingOptionalSystemPackages = () =>
     capabilities().missingOptionalSystemPackages || []
+  const isOmarchy = () => api.platform.kind === "omarchy"
   const [showGallery, setShowGallery] = createSignal(false)
 
   const handleRegenerateAllThumbnails = async () => {
@@ -128,25 +129,31 @@ export default function Settings() {
                   </label>
                   <Show when={missingSystemPackages().length > 0}>
                     <p class="settings-panel__hint">
-                      Some Records features are unavailable until these host
-                      packages are installed:{" "}
+                      Some Records features are unavailable because these
+                      dependencies could not be found:{" "}
                       {missingSystemPackages().join(", ")}.
                     </p>
-                    <code class="settings-panel__command">
-                      omarchy pkg add {missingSystemPackages().join(" ")}
-                    </code>
+                    <Show when={isOmarchy()}>
+                      <code class="settings-panel__command">
+                        omarchy pkg add {missingSystemPackages().join(" ")}
+                      </code>
+                    </Show>
                   </Show>
                   <Show when={missingOptionalSystemPackages().length > 0}>
                     <p class="settings-panel__hint">
-                      ExifTool is optional. Install it to write GPS edits and
-                      captions into image files.
+                      ExifTool is unavailable, so Records cannot write GPS edits
+                      and captions into image files.
                     </p>
-                    <code class="settings-panel__command">
-                      omarchy pkg add perl-image-exiftool
-                    </code>
+                    <Show when={isOmarchy()}>
+                      <code class="settings-panel__command">
+                        omarchy pkg add perl-image-exiftool
+                      </code>
+                    </Show>
                   </Show>
                   <p class="settings-panel__hint">
-                    Restart Records after installing system packages.
+                    {isOmarchy()
+                      ? "Restart Records after installing system packages."
+                      : "Reinstall Records if bundled media tools are unavailable."}
                   </p>
                 </div>
               </Show>

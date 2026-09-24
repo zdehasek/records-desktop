@@ -52,7 +52,7 @@ export function ProfileSettingsSection() {
   const switchProfile = async (profile) => {
     if (profile.id === profileState().active?.id || switching()) return
     const accepted = await confirm(
-      `Switch from ${profileState().active?.name || "the current profile"} to ${profile.name}? This window will disconnect. Reopen Records from the panel when the switch completes.`,
+      `Switch from ${profileState().active?.name || "the current profile"} to ${profile.name}? Records will restart using the selected profile.`,
       { confirmText: "Switch profile" }
     )
     if (!accepted) return
@@ -85,7 +85,8 @@ export function ProfileSettingsSection() {
         when={!switching()}
         fallback={
           <div class="profile-settings__switching" role="status">
-            Switching profiles. Reopen Records from the panel.
+            Switching profiles. Records will reopen when the new profile is
+            ready.
           </div>
         }
       >

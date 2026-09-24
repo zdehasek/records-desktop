@@ -10,6 +10,7 @@ export function getPlatformApi() {
 export async function initializePlatformApi() {
   initializationPromise ||= api.system.capabilities().then((capabilities) => {
     Object.assign(api.capabilities, capabilities)
+    if (capabilities.host) api.platform.kind = capabilities.host
     return api
   })
   return initializationPromise

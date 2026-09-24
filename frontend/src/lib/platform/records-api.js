@@ -136,7 +136,7 @@ export function createRecordsApi() {
   }
   api.platform = { kind: "omarchy" }
   api.capabilities = recordsCapabilities
-  api.version = () => "0.1.0"
+  api.version = () => globalThis.__RECORDS_VERSION__
   api.log = (level, tag, message, ...args) => {
     const fn = console[level] || console.log
     fn(`[${tag}]`, message, ...args)

@@ -1,4 +1,3 @@
-import { spawn } from "node:child_process"
 import { createHash, randomUUID } from "node:crypto"
 import fs from "node:fs"
 import path from "node:path"
@@ -22,7 +21,8 @@ import {
   resolveMediaCreatedAt,
   resolveMediaMimeType
 } from "./media-metadata.js"
-import { findCommand, runCommand } from "./host-tools.js"
+import { resolveMediaTool } from "./media-tools.js"
+import { platform as selectedPlatform } from "./platform.js"
 import {
   clearStreamableVideos,
   pruneStreamableVideo
@@ -31,7 +31,6 @@ import {
   companionPath,
   readMediaCompanion
 } from "./src/services/media-companion.js"
-import { createSystemTrash } from "./src/services/system-trash.js"
 import { openDuplicateStore } from "./src/services/duplicate-store.js"
 import { moveVisibility } from "./src/services/visibility-path.js"
 import { createPhotoGif } from "./src/services/photo-gif.js"
@@ -44,9 +43,6 @@ import {
   requestProfileSwitch
 } from "./src/profiles.js"
 
-const exiftool = findCommand("exiftool")
-const gio = findCommand("gio")
-const nautilus = findCommand("nautilus")
 const MIME_TYPES = {
   ".avi": "video/x-msvideo",
   ".avif": "image/avif",
@@ -64,49 +60,6 @@ const MIME_TYPES = {
   ".tiff": "image/tiff",
   ".webm": "video/webm",
   ".webp": "image/webp"
-}
-
-function openExternal(command, args) {
-  return new Promise((resolve, reject) => {
-    const child = spawn(command, args, {
-      detached: true,
-      stdio: "ignore"
-    })
-    child.once("error", reject)
-    child.once("spawn", () => {
-      child.unref()
-      resolve({ success: true })
-    })
-  })
-}
-
-function chooserArgs(directory) {
-  const args = [
-    "--file-selection",
-    directory ? "--directory" : "--title=Add photo or video"
-  ]
-  if (!directory) {
-    args.push(
-      "--file-filter=Photos and videos | *.jpg *.jpeg *.png *.heic *.heif *.tif *.tiff *.webp *.avif *.mov *.mp4 *.avi *.mkv *.webm *.m4v"
-    )
-  }
-  return args
-}
-
-function canceledPath(error) {
-  if (error.code === 1) return null
-  throw error
-}
-
-async function choosePath(directory) {
-  try {
-    const { stdout } = await runCommand("zenity", chooserArgs(directory), {
-      timeout: 0
-    })
-    return stdout.trim() || null
-  } catch (error) {
-    return canceledPath(error)
-  }
 }
 
 function checksum(filePath) {
@@ -190,6 +143,7 @@ function memoryConfig(defaultRoot) {
 }
 
 export function createRpc(db, events, options = {}) {
+  const runtimePlatform = options.platform || selectedPlatform
   const databasePath = options.databasePath || "records.sqlite3"
   const defaultMediaRoot = options.defaultMediaRoot
   const {
@@ -200,15 +154,18 @@ export function createRpc(db, events, options = {}) {
     duplicateStore = openDuplicateStore()
   } = options
   const systemPackages = options.systemPackages || {
-    ffmpeg: Boolean(findCommand("ffmpeg") && findCommand("ffprobe")),
-    glib2: Boolean(gio),
-    imagemagick: Boolean(
-      findCommand("magick") ||
-      (findCommand("convert") && findCommand("identify"))
-    ),
-    nautilus: Boolean(nautilus),
-    zenity: Boolean(findCommand("zenity")),
-    "perl-image-exiftool": Boolean(exiftool)
+    ffmpeg: Boolean(resolveMediaTool("ffmpeg") && resolveMediaTool("ffprobe")),
+    glib2:
+      runtimePlatform.name !== "omarchy" ||
+      Boolean(runtimePlatform.resolveHostTool("gio")),
+    imagemagick: Boolean(resolveMediaTool("magick")),
+    nautilus:
+      runtimePlatform.name !== "omarchy" ||
+      Boolean(runtimePlatform.resolveHostTool("nautilus")),
+    zenity:
+      runtimePlatform.name !== "omarchy" ||
+      Boolean(runtimePlatform.resolveHostTool("zenity")),
+    "perl-image-exiftool": Boolean(resolveMediaTool("exiftool"))
   }
   const missingSystemPackages = Object.entries(systemPackages)
     .filter(([name, available]) => name !== "perl-image-exiftool" && !available)
@@ -218,10 +175,15 @@ export function createRpc(db, events, options = {}) {
     : ["perl-image-exiftool"]
   const config = configuredConfig || memoryConfig(defaultMediaRoot)
   const requestShutdown = options.requestShutdown || (() => {})
-  const chooseFilePath = options.choosePath || choosePath
+  const chooseFilePath =
+    options.choosePath ||
+    ((directory) =>
+      directory ? runtimePlatform.chooseFolder() : runtimePlatform.chooseFile())
   const readMetadata = options.readMediaMetadata || readMediaMetadata
-  const systemTrash =
-    options.trashService || createSystemTrash(gio, options.systemTrash || {})
+  const systemTrash = options.trashService || {
+    available: true,
+    move: (filePath) => runtimePlatform.moveToTrash(filePath)
+  }
   const rootForAttachment = (attachment) => {
     const root = config
       .mediaRoots()
@@ -466,14 +428,12 @@ export function createRpc(db, events, options = {}) {
     "attachments:open": (id) => {
       const attachment = attachments.get(db, id, config)
       if (!attachment) throw new Error("Attachment not found")
-      if (!gio) throw new Error("Install glib2 to open attachments")
-      return openExternal(gio, ["open", attachment.file_path])
+      return runtimePlatform.openFile(attachment.file_path)
     },
     "attachments:show-in-folder": (id) => {
       const attachment = attachments.get(db, id, config)
       if (!attachment) throw new Error("Attachment not found")
-      if (!nautilus) throw new Error("Install nautilus to show attachments")
-      return openExternal(nautilus, ["--select", attachment.file_path])
+      return runtimePlatform.revealFile(attachment.file_path)
     },
     "attachments:pick-and-add": async (dayId) => {
       const defaultRoot = currentDefaultMediaRoot()
@@ -757,13 +717,12 @@ export function createRpc(db, events, options = {}) {
         return { switching: false, profile: profileInfo(profileId) }
       }
       const id = requestProfileSwitch(profileId)
-      setTimeout(() => requestShutdown(75), 50).unref?.()
+      runtimePlatform.requestRestart(requestShutdown)
       return { switching: true, profile: profileInfo(id) }
     },
     "system:capabilities": () => ({
+      ...runtimePlatform.capabilities(),
       profile: profileInfo(activeProfileId()),
-      desktopImports: false,
-      mapOffline: true,
       photoGif: systemPackages.ffmpeg,
       missingOptionalSystemPackages,
       missingSystemPackages,

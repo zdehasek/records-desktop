@@ -10,3 +10,12 @@ coverage/
 *.sqlite3-shm
 *.sqlite3-wal
 npm-debug.log*
+.build/
+dist-electron/
+release/
+vendor/mac-arm64/
+vendor/mac-x64/
+vendor/corresponding-source/
+*.dmg
+*.notarytool.log
+*.p12

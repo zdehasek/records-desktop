@@ -1,9 +1,13 @@
 import path from "node:path"
+import fs from "node:fs"
 import { fileURLToPath } from "node:url"
 import { defineConfig } from "vite"
 import solid from "vite-plugin-solid"
 
 const root = path.dirname(fileURLToPath(import.meta.url))
+const packageVersion = JSON.parse(
+  fs.readFileSync(path.join(root, "package.json"), "utf8")
+).version
 
 function bundleName(name) {
   return name
@@ -14,6 +18,9 @@ function bundleName(name) {
 export default defineConfig({
   root: path.join(root, "frontend", "src"),
   base: "./",
+  define: {
+    "globalThis.__RECORDS_VERSION__": JSON.stringify(packageVersion)
+  },
   plugins: [solid()],
   resolve: {
     alias: [

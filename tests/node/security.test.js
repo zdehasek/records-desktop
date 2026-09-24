@@ -76,7 +76,7 @@ test("launcher uses a private isolated profile and preserves route arguments", a
   const chromium = path.join(bin, "chromium")
   fs.writeFileSync(
     chromium,
-    `#!/bin/sh\n/usr/bin/node -e 'require("fs").writeFileSync(process.argv[1], JSON.stringify(process.argv.slice(2)))' '${argsFile}' "$@"\n`
+    `#!/bin/sh\n"${process.execPath}" -e 'require("fs").writeFileSync(process.argv[1], JSON.stringify(process.argv.slice(2)))' '${argsFile}' "$@"\n`
   )
   fs.chmodSync(chromium, 0o700)
   const result = spawnSync(

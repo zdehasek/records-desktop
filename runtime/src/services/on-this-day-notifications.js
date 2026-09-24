@@ -1,4 +1,5 @@
 import { runCommand } from "../../host-tools.js"
+import { platform as selectedPlatform } from "../../platform.js"
 
 const DEFAULT_TIME = "09:00"
 const CHECK_INTERVAL_MS = 60_000
@@ -43,7 +44,15 @@ export function createOnThisDayNotifications(options) {
     config,
     memoryDays,
     notificationCommand,
-    notify = () => sendOnThisDayNotification(notificationCommand),
+    platform = selectedPlatform,
+    notify = notificationCommand === undefined
+      ? () =>
+          platform.sendNotification({
+            title: "A memory is waiting",
+            body: "See what happened around this day in the past.",
+            route: "on-this-day-story"
+          })
+      : () => sendOnThisDayNotification(notificationCommand),
     now = () => new Date(),
     setIntervalFn = setInterval,
     clearIntervalFn = clearInterval,

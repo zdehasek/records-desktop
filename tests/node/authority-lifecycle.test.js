@@ -12,11 +12,26 @@ const repositoryRoot = path.resolve(
   "..",
   ".."
 )
+function command(name, override) {
+  if (process.env[override]) return process.env[override]
+  for (const directory of (process.env.PATH || "").split(path.delimiter)) {
+    const candidate = path.join(directory, name)
+    try {
+      fs.accessSync(candidate, fs.constants.X_OK)
+      return candidate
+    } catch {
+      // Continue searching PATH.
+    }
+  }
+  return name === "exiftool"
+    ? "/usr/bin/vendor_perl/exiftool"
+    : `/usr/bin/${name}`
+}
 const tools = {
-  exiftool: "/usr/bin/vendor_perl/exiftool",
-  magick: "/usr/bin/magick",
-  ffprobe: "/usr/bin/ffprobe",
-  ffmpeg: "/usr/bin/ffmpeg"
+  exiftool: command("exiftool", "REC_EXIFTOOL_PATH"),
+  magick: command("magick", "REC_MAGICK_PATH"),
+  ffprobe: command("ffprobe", "REC_FFPROBE_PATH"),
+  ffmpeg: command("ffmpeg", "REC_FFMPEG_PATH")
 }
 const retiredMethods = [
   "messages:update",
@@ -66,7 +81,7 @@ function isolatedEnvironment(directory) {
     XDG_CONFIG_HOME: path.join(directory, "config"),
     XDG_DATA_HOME: path.join(directory, "data"),
     XDG_CACHE_HOME: path.join(directory, "cache"),
-    PATH: `/usr/bin/vendor_perl:/usr/bin:/bin`,
+    PATH: process.env.PATH || "/usr/bin:/bin",
     RECORDS_LOG_LEVEL: "warn"
   }
   for (const name of [
@@ -84,7 +99,7 @@ function isolatedEnvironment(directory) {
 function startServer(env) {
   return new Promise((resolve, reject) => {
     const child = spawn(
-      "/usr/bin/node",
+      process.execPath,
       ["--no-warnings", "runtime/bootstrap.js"],
       {
         cwd: repositoryRoot,

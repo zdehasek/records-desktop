@@ -82,7 +82,7 @@ export async function startBackendFixture(root) {
   )
   const videoPath = path.join(mediaFolder, "tone.mp4")
   const video = spawnSync(
-    "/usr/bin/ffmpeg",
+    process.env.REC_FFMPEG_PATH || "/usr/bin/ffmpeg",
     [
       "-hide_banner",
       "-loglevel",
@@ -111,7 +111,7 @@ export async function startBackendFixture(root) {
   }
   fs.writeFileSync(path.join(mediaFolder, "ignored.mp3"), "legacy audio")
   const audioOnly = spawnSync(
-    "/usr/bin/ffmpeg",
+    process.env.REC_FFMPEG_PATH || "/usr/bin/ffmpeg",
     [
       "-hide_banner",
       "-loglevel",
@@ -142,7 +142,7 @@ export async function startBackendFixture(root) {
   fs.utimesSync(videoPath, today, today)
 
   const build = spawnSync(
-    "/usr/bin/node",
+    process.execPath,
     [
       "node_modules/vite/bin/vite.js",
       "build",
@@ -157,7 +157,7 @@ export async function startBackendFixture(root) {
   }
 
   const child = spawn(
-    "/usr/bin/node",
+    process.execPath,
     ["--no-warnings", "runtime/bootstrap.js"],
     {
       cwd: root,

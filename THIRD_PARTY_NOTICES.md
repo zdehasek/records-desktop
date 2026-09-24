@@ -2,6 +2,27 @@
 
 Records distributes compiled or vendored portions of the packages below. Their licenses follow. Map data is attributed to OpenStreetMap contributors in the interface; Protomaps supplies the basemap style, tiles, and glyphs.
 
+## macOS native media components
+
+The self-contained macOS application additionally bundles these source-built components:
+
+- x264 b35605ace3ddf7c1a5d67a2eb553f034aef41d55 (GPL-2.0-or-later)
+- ffmpeg 7.1.5 (GPL-2.0-or-later)
+- libjpeg-turbo 3.1.2 (IJG AND BSD-3-Clause AND Zlib)
+- libpng 1.6.50 (libpng-2.0)
+- libtiff 4.7.1 (libtiff)
+- libwebp 1.6.0 (BSD-3-Clause)
+- libde265 1.0.16 (LGPL-3.0-or-later)
+- dav1d 1.5.1 (BSD-2-Clause)
+- libheif 1.20.2 (LGPL-3.0-or-later)
+- imagemagick 7.1.2-31 (ImageMagick)
+- perl 5.42.0 (Artistic-1.0-Perl OR GPL-1.0-or-later)
+- exiftool 13.59 (Artistic-1.0-Perl OR GPL-1.0-or-later)
+
+Exact official source URLs, SHA-256 values, and build options are recorded in `vendor/sources.lock.json`. Distributions also carry each upstream license in the native resource tree.
+
+The bundled FFmpeg is GPL-enabled and linked with GPL x264. libheif and libde265 are shipped as replaceable LGPL shared libraries. Binary releases are accompanied by a `Records-<version>-corresponding-source.tar.gz` archive containing the exact FFmpeg, x264, libheif, libde265, and dav1d sources plus complete rebuild and relocation-validation materials. Release maintainers must retain that archive beside each binary release. This distribution choice does not change the license of unrelated Records source files.
+
 ## @fontsource/caveat 5.3.0
 
 ```text

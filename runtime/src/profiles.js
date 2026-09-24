@@ -1,21 +1,11 @@
 import { randomUUID } from "node:crypto"
 import fs from "node:fs"
-import os from "node:os"
 import path from "node:path"
+import { platform } from "../platform.js"
 import { parseDocument, stringify } from "../vendor/yaml.js"
 
 const PROFILE_ID = /^[a-z0-9][a-z0-9_-]{0,31}$/
 const INTERNAL_PROFILE_ENV = "RECORDS_PROFILE_ID"
-
-function xdgDirectory(environmentName, fallbackParts) {
-  return path.resolve(
-    process.env[environmentName] || path.join(os.homedir(), ...fallbackParts)
-  )
-}
-
-function recordsRoot(environmentName, fallbackParts) {
-  return path.join(xdgDirectory(environmentName, fallbackParts), "records")
-}
 
 function privateDirectory(directory) {
   fs.mkdirSync(directory, { recursive: true, mode: 0o700 })
@@ -59,15 +49,15 @@ export function validateProfileId(value) {
 }
 
 export function recordsConfigRoot() {
-  return recordsRoot("XDG_CONFIG_HOME", [".config"])
+  return path.dirname(path.dirname(platform.configDirectory("production")))
 }
 
 export function recordsDataRoot() {
-  return recordsRoot("XDG_DATA_HOME", [".local", "share"])
+  return path.dirname(path.dirname(platform.dataDirectory("production")))
 }
 
 export function recordsCacheRoot() {
-  return recordsRoot("XDG_CACHE_HOME", [".cache"])
+  return path.dirname(path.dirname(platform.cacheDirectory("production")))
 }
 
 export function profileConfigDirectory(profileId) {

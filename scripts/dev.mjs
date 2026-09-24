@@ -74,7 +74,7 @@ function waitForBackend(child) {
 
 function startBackend(port = 0) {
   const child = spawn(
-    "/usr/bin/node",
+    process.execPath,
     ["--no-warnings", "runtime/bootstrap.js"],
     {
       cwd: root,

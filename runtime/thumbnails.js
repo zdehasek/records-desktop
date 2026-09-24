@@ -1,7 +1,13 @@
 import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
-import { findCommand, runCommand } from "./host-tools.js"
+import { runCommand } from "./host-tools.js"
+import {
+  resolveMediaTool,
+  toolArgs,
+  toolCommand,
+  toolOptions
+} from "./media-tools.js"
 import { mediaCacheKey } from "./src/services/media-cache-key.js"
 import {
   clearThumbnails,
@@ -11,8 +17,8 @@ import {
   putThumbnail
 } from "./src/services/thumbnail/thumbnail-db.js"
 
-const magick = findCommand("magick") || findCommand("convert")
-const ffmpeg = findCommand("ffmpeg")
+const magick = resolveMediaTool("magick")
+const ffmpeg = resolveMediaTool("ffmpeg")
 const sizes = { thumb: 512, micro: 80, year: 160 }
 const THUMBNAIL_GENERATOR_VERSION = 1
 const DEFAULT_MAX_CONCURRENT = 2
@@ -187,8 +193,8 @@ export function createThumbnailService(dataDirectory, options = {}) {
     try {
       if (attachment.mime_type?.startsWith("video/") && ffmpeg) {
         await runCommand(
-          ffmpeg,
-          [
+          toolCommand(ffmpeg),
+          toolArgs(ffmpeg, [
             "-y",
             "-ss",
             "0",
@@ -199,13 +205,13 @@ export function createThumbnailService(dataDirectory, options = {}) {
             "-vf",
             `scale=${size}:${size}:force_original_aspect_ratio=decrease`,
             temporary
-          ],
-          { signal }
+          ]),
+          toolOptions(ffmpeg, { signal })
         )
       } else if (attachment.mime_type?.startsWith("image/") && magick) {
         await runCommand(
-          magick,
-          [
+          toolCommand(magick),
+          toolArgs(magick, [
             `${attachment.file_path}[0]`,
             "-auto-orient",
             "-thumbnail",
@@ -214,8 +220,8 @@ export function createThumbnailService(dataDirectory, options = {}) {
             "-quality",
             "82",
             temporary
-          ],
-          { signal }
+          ]),
+          toolOptions(magick, { signal })
         )
       } else {
         return null

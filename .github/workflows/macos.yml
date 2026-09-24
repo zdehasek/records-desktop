@@ -1,0 +1,131 @@
+name: macOS
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            arch: arm64
+            uname: arm64
+          - runner: macos-15-intel
+            arch: x64
+            uname: x86_64
+    runs-on: ${{ matrix.runner }}
+    env:
+      RECORDS_MAC_ARCH: ${{ matrix.arch }}
+      MACOSX_DEPLOYMENT_TARGET: "13.0"
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assert native runner architecture
+        run: test "$(uname -m)" = "${{ matrix.uname }}"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.1
+          cache: npm
+
+      - name: Install native build prerequisites
+        run: brew install automake cmake libtool meson nasm ninja pkg-config
+
+      - run: npm ci
+      - run: npm run validate:vendor-lock
+
+      - name: Cache checksum-verified native build
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build/vendor/downloads
+            vendor/mac-${{ matrix.arch }}
+          key: vendor-${{ matrix.arch }}-${{ runner.os }}-${{ hashFiles('vendor/sources.lock.json', 'scripts/vendor/**') }}-${{ env.MACOSX_DEPLOYMENT_TARGET }}
+
+      - run: npm run vendor:build:mac
+      - name: Use staged tools for shared integration tests
+        run: |
+          echo "$GITHUB_WORKSPACE/vendor/mac-${{ matrix.arch }}/bin" >> "$GITHUB_PATH"
+          echo "$GITHUB_WORKSPACE/vendor/mac-${{ matrix.arch }}/perl/bin" >> "$GITHUB_PATH"
+          echo "REC_FFMPEG_PATH=$GITHUB_WORKSPACE/vendor/mac-${{ matrix.arch }}/bin/ffmpeg" >> "$GITHUB_ENV"
+          echo "REC_FFPROBE_PATH=$GITHUB_WORKSPACE/vendor/mac-${{ matrix.arch }}/bin/ffprobe" >> "$GITHUB_ENV"
+          echo "REC_MAGICK_PATH=$GITHUB_WORKSPACE/vendor/mac-${{ matrix.arch }}/bin/magick" >> "$GITHUB_ENV"
+          echo "REC_EXIFTOOL_PATH=$GITHUB_WORKSPACE/vendor/mac-${{ matrix.arch }}/exiftool/exiftool" >> "$GITHUB_ENV"
+      - run: npm run check:static
+      - run: npm test
+      - run: npm run check:electron-runtime
+      - run: npm run build
+      - run: npm run check:bundle
+      - run: npm run check:release
+
+      - name: Configure protected-tag signing
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          CSC_LINK_SECRET: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD_SECRET: ${{ secrets.CSC_KEY_PASSWORD }}
+          RAW_APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_KEY_ID_SECRET: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_SECRET: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          if [[ -z "$CSC_LINK_SECRET" || -z "$CSC_KEY_PASSWORD_SECRET" || -z "$RAW_APPLE_API_KEY" || -z "$APPLE_API_KEY_ID_SECRET" || -z "$APPLE_API_ISSUER_SECRET" ]]; then
+            echo "Signing credentials incomplete; producing unsigned artifacts"
+            exit 0
+          fi
+          printf '%s' "$RAW_APPLE_API_KEY" > "$RUNNER_TEMP/AuthKey.p8"
+          echo "CSC_LINK=$CSC_LINK_SECRET" >> "$GITHUB_ENV"
+          echo "CSC_KEY_PASSWORD=$CSC_KEY_PASSWORD_SECRET" >> "$GITHUB_ENV"
+          echo "APPLE_API_KEY=$RUNNER_TEMP/AuthKey.p8" >> "$GITHUB_ENV"
+          echo "APPLE_API_KEY_ID=$APPLE_API_KEY_ID_SECRET" >> "$GITHUB_ENV"
+          echo "APPLE_API_ISSUER=$APPLE_API_ISSUER_SECRET" >> "$GITHUB_ENV"
+          echo "CSC_IDENTITY_AUTO_DISCOVERY=true" >> "$GITHUB_ENV"
+
+      - name: Package DMG and ZIP
+        run: npm run dist:mac:${{ matrix.arch }}
+
+      - name: Validate unpacked application
+        run: npm run validate:package -- "dist-electron/mac${{ matrix.arch == 'arm64' && '-arm64' || '' }}/Records.app"
+
+      - name: Smoke-test packaged backend without package-manager PATH
+        run: npm run smoke:packaged-backend -- "dist-electron/mac${{ matrix.arch == 'arm64' && '-arm64' || '' }}/Records.app"
+
+      - name: Inspect protected-tag code entitlements
+        if: startsWith(github.ref, 'refs/tags/v') && env.CSC_IDENTITY_AUTO_DISCOVERY == 'true'
+        run: npm run validate:signed-package -- "dist-electron/mac${{ matrix.arch == 'arm64' && '-arm64' || '' }}/Records.app"
+
+      - name: Smoke-test relocated packaged GUI
+        run: npm run smoke:packaged-gui -- "dist-electron/mac${{ matrix.arch == 'arm64' && '-arm64' || '' }}/Records.app"
+
+      - run: npm run vendor:source
+
+      - name: Record artifact checksums
+        run: shasum -a 256 dist-electron/*.dmg dist-electron/*.zip dist-electron/*corresponding-source.tar.gz > "dist-electron/Records-${{ matrix.arch }}-SHA256SUMS.txt"
+
+      - name: Verify protected-tag signature and notarization
+        if: startsWith(github.ref, 'refs/tags/v') && env.CSC_IDENTITY_AUTO_DISCOVERY == 'true'
+        run: |
+          APP="dist-electron/mac${{ matrix.arch == 'arm64' && '-arm64' || '' }}/Records.app"
+          codesign --verify --deep --strict --verbose=2 "$APP"
+          spctl --assess --type execute --verbose=2 "$APP"
+          xcrun stapler validate "$APP"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Records-mac-${{ matrix.arch }}
+          if-no-files-found: error
+          path: |
+            dist-electron/*.dmg
+            dist-electron/*.zip
+            dist-electron/*SHA256SUMS.txt
+            dist-electron/*corresponding-source.tar.gz
+            vendor/mac-${{ matrix.arch }}/build-info.json
+            vendor/mac-${{ matrix.arch }}/ffmpeg-buildconf.txt

@@ -21,10 +21,10 @@ import { createImageCaptionMetadata } from "./src/services/image-caption-metadat
 import { openRecordsConfig } from "./src/services/config-store.js"
 import { ensurePrivateDirectory, recordsCacheDirectory } from "./src/paths.js"
 import {
-  findCommand,
   terminateActiveProcessTrees,
   terminateActiveProcessTreesSync
 } from "./host-tools.js"
+import { platform } from "./platform.js"
 import { createSystemTrash } from "./src/services/system-trash.js"
 import { openDuplicateStore } from "./src/services/duplicate-store.js"
 import { createOnThisDayNotifications } from "./src/services/on-this-day-notifications.js"
@@ -50,7 +50,10 @@ const config = openRecordsConfig()
 const db = openDatabase(databasePath)
 const events = new EventEmitter()
 const cacheDirectory = ensurePrivateDirectory(recordsCacheDirectory())
-const systemTrash = createSystemTrash(findCommand("gio"))
+const systemTrash =
+  platform.name === "omarchy"
+    ? createSystemTrash(platform.resolveHostTool("gio"))
+    : { available: true, move: (filePath) => platform.moveToTrash(filePath) }
 const duplicateStore = openDuplicateStore()
 openTileCacheDb(cacheDirectory)
 const thumbnails = createThumbnailService(
@@ -75,11 +78,12 @@ const rpc = createRpc(db, events, {
   thumbnails,
   watchScanner,
   config,
+  platform,
   requestShutdown: (exitCode) => shutdown(exitCode)
 })
 const onThisDayNotifications = createOnThisDayNotifications({
   config,
-  notificationCommand: findCommand("omarchy-notification-send"),
+  platform,
   memoryDays: (date, opts) => rpc("days:memory", [date, opts])
 })
 const eventClients = new Set()
@@ -641,9 +645,14 @@ try {
   const profile = profileInfo(activeProfileId())
   commitStartupProfile(profile.id)
   onThisDayNotifications.start()
-  process.stdout.write(
-    `RECORDS_READY ${JSON.stringify({ url: `http://127.0.0.1:${address.port}${basePath}`, profile })}\n`
-  )
+  const readiness = {
+    url: `http://127.0.0.1:${address.port}${basePath}`,
+    profile
+  }
+  process.stdout.write(`RECORDS_READY ${JSON.stringify(readiness)}\n`)
+  if (platform.name === "electron" && process.send) {
+    process.send({ type: "records:ready", ...readiness })
+  }
   void initializeProjection()
 } catch (error) {
   shuttingDown = true

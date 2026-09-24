@@ -17,3 +17,11 @@ should arrive within seven days.
 
 Records plugins run unsandboxed as the current user. Marketplace validation is
 not a security audit.
+
+The macOS renderer is sandboxed, but the Electron main process and backend have
+the current user's access to explicitly selected media folders. Packaged media
+tools are checksum-locked and resolved only inside `Records.app`; production
+does not fall back to `PATH` or Homebrew. Release checksums and code signatures
+establish artifact provenance. Unsigned CI artifacts require a deliberate local
+Gatekeeper override and should never be opened unless their workflow origin and
+checksum have been verified.
