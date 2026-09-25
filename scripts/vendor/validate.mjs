@@ -28,6 +28,19 @@ export function otoolBody(output, file) {
   return body.join("\n")
 }
 
+export function withSafeOtoolPath(file, inspect) {
+  if (!/[()\s]/.test(file)) return inspect(file)
+
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "records-otool-"))
+  const alias = path.join(directory, "binary")
+  try {
+    fs.symlinkSync(path.resolve(file), alias)
+    return inspect(alias)
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true })
+  }
+}
+
 function walk(directory, allowSymlinks = false) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const item = path.join(directory, entry.name)
@@ -104,31 +117,41 @@ function validateLock() {
 }
 
 function machoDetails(file) {
-  const linkage = otoolBody(run("otool", ["-L", file]), file)
-  const loadCommands = otoolBody(run("otool", ["-l", file]), file)
-  const idResult = spawnSync("otool", ["-D", file], { encoding: "utf8" })
-  const id =
-    idResult.status === 0
-      ? idResult.stdout
-          .split("\n")
-          .slice(1)
-          .map((line) => line.trim())
-          .find(Boolean)
-      : undefined
-  const dependencies = linkage
-    .split("\n")
-    .filter((line) => line.trim())
-    .map((line) => line.trim().split(/\s+/)[0])
-    .filter((dependency) => dependency !== id)
-  const lines = loadCommands.split("\n")
-  const rpaths = []
-  for (let index = 0; index < lines.length; index += 1) {
-    if (lines[index].trim() !== "cmd LC_RPATH") continue
-    const match = lines[index + 2]?.trim().match(/^path (.+) \(offset \d+\)$/)
-    if (!match) fail(`${file}: cannot parse LC_RPATH`)
-    rpaths.push(match[1])
-  }
-  return { dependencies, id, linkage, loadCommands, rpaths }
+  return withSafeOtoolPath(file, (inspectedFile) => {
+    const linkage = otoolBody(
+      run("otool", ["-L", inspectedFile]),
+      inspectedFile
+    )
+    const loadCommands = otoolBody(
+      run("otool", ["-l", inspectedFile]),
+      inspectedFile
+    )
+    const idResult = spawnSync("otool", ["-D", inspectedFile], {
+      encoding: "utf8"
+    })
+    const id =
+      idResult.status === 0
+        ? idResult.stdout
+            .split("\n")
+            .slice(1)
+            .map((line) => line.trim())
+            .find(Boolean)
+        : undefined
+    const dependencies = linkage
+      .split("\n")
+      .filter((line) => line.trim())
+      .map((line) => line.trim().split(/\s+/)[0])
+      .filter((dependency) => dependency !== id)
+    const lines = loadCommands.split("\n")
+    const rpaths = []
+    for (let index = 0; index < lines.length; index += 1) {
+      if (lines[index].trim() !== "cmd LC_RPATH") continue
+      const match = lines[index + 2]?.trim().match(/^path (.+) \(offset \d+\)$/)
+      if (!match) fail(`${file}: cannot parse LC_RPATH`)
+      rpaths.push(match[1])
+    }
+    return { dependencies, id, linkage, loadCommands, rpaths }
+  })
 }
 
 function isSystemLibrary(dependency) {
