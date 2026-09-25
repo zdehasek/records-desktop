@@ -70,6 +70,16 @@ cmake_static() {
   cmake_build "$name" OFF "$@"
 }
 
+write_system_zlib_pc() {
+  mkdir -p "$PREFIX/lib/pkgconfig"
+  printf '%s\n' \
+    'Name: zlib' \
+    'Description: macOS system zlib' \
+    'Version: 1.2.11' \
+    'Libs: -lz' \
+    'Cflags:' > "$PREFIX/lib/pkgconfig/zlib.pc"
+}
+
 stage_dylib() {
   local stem=$1 destination=$2
   local -a matches=()
@@ -95,6 +105,8 @@ rewrite_matching_dependency() {
 rm -rf "$SOURCES" "$WORK/$ARCH" "$STAGE"
 mkdir -p "$PREFIX" "$STAGE" "$WORK/$ARCH"
 node "$ROOT/scripts/vendor/fetch.mjs"
+write_system_zlib_pc
+pkg-config --exists 'zlib >= 1.2.0'
 
 X264=$(extract_source x264)
 (cd "$X264" && ./configure --prefix="$PREFIX" --host="$(uname -m)-apple-darwin" --enable-static --disable-cli --disable-opencl && make -j"$JOBS" && make install)
@@ -102,6 +114,7 @@ X264=$(extract_source x264)
 cmake_static libjpeg-turbo -DENABLE_SHARED=OFF -DWITH_TURBOJPEG=OFF -DWITH_TESTS=OFF
 cmake_static libpng -DPNG_SHARED=OFF -DPNG_STATIC=ON -DPNG_TESTS=OFF -DPNG_TOOLS=OFF
 cmake_static libtiff -Dtiff-tools=OFF -Dtiff-tests=OFF -Dtiff-contrib=OFF -Dtiff-docs=OFF -Djpeg=ON -Djbig=OFF -Dlerc=OFF -Dlzma=OFF -Dwebp=OFF -Dzstd=OFF
+pkg-config --exists 'libpng >= 1.0.0' 'libtiff-4 >= 4.0.0'
 cmake_static libwebp -DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_CWEBP=OFF -DWEBP_BUILD_DWEBP=OFF -DWEBP_BUILD_EXTRAS=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPINFO=OFF -DWEBP_BUILD_WEBPMUX=OFF
 sed -i '' 's/^Requires\.private: libsharpyuv$/Requires: libsharpyuv/' "$PREFIX/lib/pkgconfig/libwebp.pc"
 [[ $(pkg-config --libs libwebp) == *'-lsharpyuv'* ]] || { echo "libwebp pkg-config metadata omits libsharpyuv" >&2; exit 1; }

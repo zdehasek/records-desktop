@@ -4,6 +4,11 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.12 - 2026-09-25
+
+- Expose the macOS system zlib through isolated package metadata so static PNG
+  and TIFF delegates are discoverable without admitting Homebrew packages.
+
 ## 0.1.11 - 2026-09-25
 
 - Keep bundled Perl from discovering Homebrew headers, libraries, and GDBM,
