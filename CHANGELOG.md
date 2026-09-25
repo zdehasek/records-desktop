@@ -4,6 +4,10 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.15 - 2026-09-25
+
+- Validate bundled Perl's architecture-specific `File::Spec` installation path.
+
 ## 0.1.14 - 2026-09-25
 
 - Canonicalize the relocated macOS vendor path before validating Perl's

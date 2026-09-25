@@ -321,7 +321,7 @@ function validateRelocation(stage) {
       my $arch = "$pure/$Config{archname}";
       my %expected = (
         "strict.pm" => "$pure/strict.pm",
-        "File/Spec.pm" => "$pure/File/Spec.pm",
+        "File/Spec.pm" => "$arch/File/Spec.pm",
         "Config.pm" => "$arch/Config.pm",
       );
       for my $module (sort keys %expected) {
