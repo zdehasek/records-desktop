@@ -174,9 +174,9 @@ export async function startBackendFixture(root) {
     }
   )
 
+  let errors = ""
   const appUrl = await new Promise((resolve, reject) => {
     let output = ""
-    let errors = ""
     const timeout = setTimeout(() => {
       reject(new Error(`server readiness timed out: ${errors}`))
     }, 20_000)
@@ -199,11 +199,19 @@ export async function startBackendFixture(root) {
   })
 
   const rpc = async (method, args = []) => {
-    const response = await fetch(new URL("rpc", appUrl), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ method, args })
-    })
+    let response
+    try {
+      response = await fetch(new URL("rpc", appUrl), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ method, args })
+      })
+    } catch (error) {
+      throw new Error(
+        `RPC transport failed: backend exit=${child.exitCode} signal=${child.signalCode}\n${errors}`,
+        { cause: error }
+      )
+    }
     const payload = await response.json()
     if (!response.ok) throw new Error(payload.error || `RPC failed: ${method}`)
     return payload.result

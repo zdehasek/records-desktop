@@ -16,7 +16,8 @@ export default [
       "test-results/",
       "playwright-report/",
       ".playwright-cli/",
-      ".dev/"
+      ".dev/",
+      ".build/"
     ]
   },
   pluginImportX.flatConfigs.recommended,
