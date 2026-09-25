@@ -17,6 +17,7 @@ const workspace = fs.mkdtempSync(path.join(os.tmpdir(), "Records GUI smoke "))
 const app = path.join(workspace, "Relocated Records.app")
 const home = path.join(workspace, "isolated home")
 const recordsData = path.join(home, "Library", "Application Support", "records")
+const recordsCache = path.join(home, "Library", "Caches", "records")
 const userData = path.join(recordsData, "electron")
 const sessionData = path.join(userData, "session")
 fs.mkdirSync(home, { recursive: true })
@@ -34,7 +35,10 @@ const child = spawn(
     env: {
       HOME: home,
       LANG: process.env.LANG || "en_US.UTF-8",
-      PATH: "/usr/bin:/bin:/usr/sbin:/sbin"
+      PATH: "/usr/bin:/bin:/usr/sbin:/sbin",
+      RECORDS_CONFIG_DIR: recordsData,
+      RECORDS_DATA_DIR: recordsData,
+      RECORDS_CACHE_DIR: recordsCache
     },
     stdio: ["ignore", "pipe", "pipe"]
   }

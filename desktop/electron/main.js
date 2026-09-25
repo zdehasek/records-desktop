@@ -14,7 +14,11 @@ const sourceRoot = path.resolve(
 )
 const resourcesRoot = () =>
   app.isPackaged ? process.resourcesPath : sourceRoot
-const applicationPaths = configureElectronPaths(app)
+const applicationPaths = configureElectronPaths(app, {
+  configDirectory: process.env.RECORDS_CONFIG_DIR,
+  dataDirectory: process.env.RECORDS_DATA_DIR,
+  cacheDirectory: process.env.RECORDS_CACHE_DIR
+})
 let focusRoute = () => {}
 const nativeHost = createNativeHost({
   dialog,

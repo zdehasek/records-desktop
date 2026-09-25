@@ -42,3 +42,37 @@ test("Electron paths are stable and independent of the product name", () => {
     assert.deepEqual(options, { recursive: true, mode: 0o700 })
   }
 })
+
+test("Electron paths honor explicit storage roots", () => {
+  const configured = []
+  const created = []
+  const app = {
+    setPath: (name, value) => configured.push([name, value])
+  }
+
+  const paths = configureElectronPaths(app, {
+    configDirectory: "/isolated/config",
+    dataDirectory: "/isolated/data",
+    cacheDirectory: "/isolated/cache",
+    makeDirectory: (directory) => created.push(directory)
+  })
+
+  assert.deepEqual(paths, {
+    configDirectory: "/isolated/config",
+    dataDirectory: "/isolated/data",
+    cacheDirectory: "/isolated/cache",
+    userDataDirectory: "/isolated/data/electron",
+    sessionDataDirectory: "/isolated/data/electron/session"
+  })
+  assert.deepEqual(created, [
+    "/isolated/config",
+    "/isolated/data",
+    "/isolated/cache",
+    "/isolated/data/electron",
+    "/isolated/data/electron/session"
+  ])
+  assert.deepEqual(configured, [
+    ["userData", paths.userDataDirectory],
+    ["sessionData", paths.sessionDataDirectory]
+  ])
+})
