@@ -12,7 +12,6 @@ function fixture() {
   const sessionData = path.join(userData, "session")
   const marker = "records-storage-test-marker"
   fs.mkdirSync(sessionData, { recursive: true })
-  fs.writeFileSync(path.join(userData, "Local State"), "{}")
   fs.writeFileSync(path.join(sessionData, "state.log"), marker)
   return { home, userData, sessionData, marker }
 }

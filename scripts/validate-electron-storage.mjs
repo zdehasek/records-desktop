@@ -33,12 +33,6 @@ export function validateElectronStorage({
   sessionData,
   marker
 }) {
-  const localState = path.join(userData, "Local State")
-  if (!fs.statSync(localState, { throwIfNoEntry: false })?.isFile())
-    throw new Error("configured userData has no Chromium Local State file")
-  if (fs.statSync(localState).size === 0)
-    throw new Error("configured Chromium Local State file is empty")
-
   const sessionFiles = walk(sessionData).filter(
     (file) => fs.statSync(file).size > 0
   )
@@ -84,5 +78,5 @@ export function validateElectronStorage({
     }
   }
 
-  return { localState, markerFiles, sessionFiles }
+  return { markerFiles, sessionFiles }
 }
