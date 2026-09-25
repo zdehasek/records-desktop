@@ -160,7 +160,10 @@
         "-des",
         "-Duserelocatableinc",
         "-Duseshrplib=false",
-        "-Duseithreads=false"
+        "-Duseithreads=false",
+        "-Dlocincpth=",
+        "-Dloclibpth=",
+        "-Ui_gdbm"
       ]
     },
     {

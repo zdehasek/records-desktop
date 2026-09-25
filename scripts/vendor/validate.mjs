@@ -94,6 +94,10 @@ function validateLock() {
   const perl = lock.components.find(({ name }) => name === "perl")
   if (!perl.buildOptions.includes("-Duserelocatableinc"))
     fail("Perl lock options must enable userelocatableinc")
+  for (const option of ["-Dlocincpth=", "-Dloclibpth=", "-Ui_gdbm"]) {
+    if (!perl.buildOptions.includes(option))
+      fail(`Perl lock options must include ${option}`)
+  }
   process.stdout.write(
     `Source lock: ${lock.components.length} complete HTTPS/SHA-256 entries\n`
   )
@@ -421,8 +425,6 @@ function validateStage(stage, specifiedArchitecture) {
     fail("libheif has an unexpected Mach-O install ID")
   if (machos.get(libde265)?.id !== "@rpath/libde265.dylib")
     fail("libde265 has an unexpected Mach-O install ID")
-  if (!machos.get(magick)?.rpaths.includes("@executable_path/../lib"))
-    fail("magick is missing its staged-library LC_RPATH")
   if (!machos.get(libheif)?.rpaths.includes("@loader_path"))
     fail("libheif is missing its loader-relative LC_RPATH")
   if (!hasDependency(machos, magick, "@executable_path/../lib/libheif.dylib"))

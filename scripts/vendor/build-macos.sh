@@ -134,7 +134,7 @@ FFMPEG=$(extract_source ffmpeg)
 (cd "$FFMPEG" && ./configure --prefix="$PREFIX" --pkg-config-flags=--static --extra-cflags="-I$PREFIX/include" --extra-ldflags="-L$PREFIX/lib" --disable-autodetect --enable-gpl --enable-libx264 --enable-videotoolbox --disable-shared --enable-static --disable-doc --disable-debug --disable-ffplay --disable-network && make -j"$JOBS" && make install)
 
 PERL=$(extract_source perl)
-(cd "$PERL" && ./Configure -des -Dprefix="$PREFIX/perl" -Duserelocatableinc -Duseshrplib=false -Duseithreads=false -Dman1dir=none -Dman3dir=none && make -j"$JOBS" && make install)
+(cd "$PERL" && ./Configure -des -Dprefix="$PREFIX/perl" -Duserelocatableinc -Duseshrplib=false -Duseithreads=false -Dlocincpth= -Dloclibpth= -Ui_gdbm -Dman1dir=none -Dman3dir=none && make -j"$JOBS" && make install)
 
 EXIFTOOL=$(extract_source exiftool)
 mkdir -p "$STAGE/bin" "$STAGE/lib" "$STAGE/exiftool" "$STAGE/etc/ImageMagick-7" "$STAGE/licenses"
@@ -146,7 +146,6 @@ install_name_tool -id @rpath/libheif.dylib "$STAGE/lib/libheif.dylib"
 rewrite_matching_dependency "$STAGE/lib/libheif.dylib" 'libde265*.dylib' @loader_path/libde265.dylib
 rewrite_matching_dependency "$STAGE/bin/magick" 'libheif*.dylib' @executable_path/../lib/libheif.dylib
 install_name_tool -add_rpath @loader_path "$STAGE/lib/libheif.dylib"
-install_name_tool -add_rpath @executable_path/../lib "$STAGE/bin/magick"
 cp -R "$PREFIX/perl" "$STAGE/perl"
 PERL_ARCHIVE=$(find "$STAGE/perl" -type f -name libperl.a -print)
 [[ -n $PERL_ARCHIVE && $PERL_ARCHIVE != *$'\n'* ]] || { echo "expected one staged libperl.a" >&2; exit 1; }

@@ -4,6 +4,11 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.11 - 2026-09-25
+
+- Keep bundled Perl from discovering Homebrew headers, libraries, and GDBM,
+  and avoid adding a redundant rpath to the static ImageMagick executable.
+
 ## 0.1.10 - 2026-09-25
 
 - Exclude `otool`'s inspected-file header from Mach-O reference validation while
