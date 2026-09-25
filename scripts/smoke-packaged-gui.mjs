@@ -91,16 +91,20 @@ async function waitForUi(port) {
   throw new Error(`timed out waiting for the packaged UI: ${output}`)
 }
 
-function cdp(webSocketUrl, method, params = {}) {
+function cdp(webSocketUrl, method, params = {}, waitForResponse = true) {
   return new Promise((resolve, reject) => {
     const socket = new WebSocket(webSocketUrl)
     const timer = setTimeout(() => {
       socket.close()
       reject(new Error(`CDP ${method} timed out`))
     }, 5_000)
-    socket.addEventListener("open", () =>
+    socket.addEventListener("open", () => {
       socket.send(JSON.stringify({ id: 1, method, params }))
-    )
+      if (!waitForResponse) {
+        clearTimeout(timer)
+        resolve()
+      }
+    })
     socket.addEventListener("message", (event) => {
       const message = JSON.parse(event.data)
       if (message.id !== 1) return
@@ -161,7 +165,7 @@ async function persistStorageMarker(webSocketUrl, marker) {
 async function closeCleanly(port) {
   const response = await fetch(`http://127.0.0.1:${port}/json/version`)
   const browser = await response.json()
-  await cdp(browser.webSocketDebuggerUrl, "Browser.close")
+  await cdp(browser.webSocketDebuggerUrl, "Browser.close", {}, false)
   await Promise.race([
     childExit,
     delay(10_000).then(() => {
