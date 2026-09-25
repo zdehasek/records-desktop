@@ -21,5 +21,7 @@ run("npx", [
   "electron-builder.config.cjs",
   "--mac",
   ...(process.argv.includes("--dist") ? ["dmg", "zip"] : ["--dir"]),
-  `--${architecture}`
+  `--${architecture}`,
+  "--publish",
+  "never"
 ])
