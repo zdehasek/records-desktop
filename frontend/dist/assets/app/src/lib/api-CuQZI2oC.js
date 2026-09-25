@@ -1,0 +1,1 @@
+import{createRecordsApi as r}from"./platform/records-api-Bk7v_iKT.js";const t=r();let n=null;function e(){return t}async function a(){return n||(n=t.system.capabilities().then(i=>(Object.assign(t.capabilities,i),i.host&&(t.platform.kind=i.host),t))),n}function l(){try{return e()}catch{return null}}export{l as getOptionalPlatformApi,e as getPlatformApi,a as initializePlatformApi};

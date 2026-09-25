@@ -4,6 +4,11 @@ All notable changes to Records are documented here.
 
 ## Unreleased
 
+## 0.1.14 - 2026-09-25
+
+- Canonicalize the relocated macOS vendor path before validating Perl's
+  relocatable include directories.
+
 ## 0.1.13 - 2026-09-25
 
 - Link ImageMagick to the macOS system zlib required by its static PNG and TIFF

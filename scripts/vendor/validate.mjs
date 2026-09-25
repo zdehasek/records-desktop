@@ -298,9 +298,10 @@ function cleanEnvironment(home, stage) {
 
 function validateRelocation(stage) {
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), "records-vendor-"))
-  const relocated = path.join(temporary, `relocated-${path.basename(stage)}`)
+  let relocated = path.join(temporary, `relocated-${path.basename(stage)}`)
   try {
     fs.cpSync(stage, relocated, { recursive: true, dereference: true })
+    relocated = fs.realpathSync(relocated)
     const home = path.join(temporary, "home")
     fs.mkdirSync(home)
     const environment = cleanEnvironment(home, relocated)
