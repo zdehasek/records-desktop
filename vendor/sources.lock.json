@@ -144,7 +144,7 @@
         "--without-bzlib",
         "--without-lzma",
         "--without-zip",
-        "--without-zlib",
+        "--with-zlib",
         "--without-zstd"
       ]
     },

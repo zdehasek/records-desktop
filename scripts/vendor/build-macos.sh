@@ -141,7 +141,7 @@ cmake_build libheif ON \
   -DWITH_GDK_PIXBUF=OFF -DWITH_EXAMPLES=OFF -DBUILD_TESTING=OFF
 
 IM=$(extract_source imagemagick)
-(cd "$IM" && ./configure --prefix="$PREFIX" --disable-shared --enable-static --without-modules --without-x --without-gslib --without-bzlib --without-djvu --without-fftw --without-fontconfig --without-freetype --without-lcms --without-lzma --without-openjp2 --without-raw --without-xml --without-zip --without-zlib --without-zstd && make -j"$JOBS" && make install)
+(cd "$IM" && ./configure --prefix="$PREFIX" --disable-shared --enable-static --without-modules --without-x --without-gslib --without-bzlib --without-djvu --without-fftw --without-fontconfig --without-freetype --without-lcms --without-lzma --without-openjp2 --without-raw --without-xml --without-zip --with-zlib --without-zstd && make -j"$JOBS" && make install)
 
 FFMPEG=$(extract_source ffmpeg)
 (cd "$FFMPEG" && ./configure --prefix="$PREFIX" --pkg-config-flags=--static --extra-cflags="-I$PREFIX/include" --extra-ldflags="-L$PREFIX/lib" --disable-autodetect --enable-gpl --enable-libx264 --enable-videotoolbox --disable-shared --enable-static --disable-doc --disable-debug --disable-ffplay --disable-network && make -j"$JOBS" && make install)
