@@ -19,6 +19,8 @@ function fixture(context) {
   const previousDelay = process.env.FAKE_THUMBNAIL_DELAY
   const previousFailure = process.env.FAKE_THUMBNAIL_FAIL
   const previousIgnoreTerm = process.env.FAKE_THUMBNAIL_IGNORE_TERM
+  const previousMagick = process.env.REC_MAGICK_PATH
+  delete process.env.REC_MAGICK_PATH
   fs.mkdirSync(bin)
   const command = path.join(bin, "magick")
   fs.writeFileSync(
@@ -51,6 +53,8 @@ setTimeout(() => fs.writeFileSync(args.at(-1), "thumb:" + fs.readFileSync(source
     if (previousIgnoreTerm === undefined)
       delete process.env.FAKE_THUMBNAIL_IGNORE_TERM
     else process.env.FAKE_THUMBNAIL_IGNORE_TERM = previousIgnoreTerm
+    if (previousMagick === undefined) delete process.env.REC_MAGICK_PATH
+    else process.env.REC_MAGICK_PATH = previousMagick
     fs.rmSync(directory, { recursive: true, force: true })
   })
   return { directory, calls }

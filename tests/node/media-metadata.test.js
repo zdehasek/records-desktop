@@ -8,7 +8,23 @@ function executable(filePath, body) {
   fs.writeFileSync(filePath, `#!/usr/bin/env node\n${body}\n`, { mode: 0o700 })
 }
 
+function isolateToolEnvironment(context) {
+  const previous = {
+    REC_FFPROBE_PATH: process.env.REC_FFPROBE_PATH,
+    REC_MAGICK_PATH: process.env.REC_MAGICK_PATH
+  }
+  delete process.env.REC_FFPROBE_PATH
+  delete process.env.REC_MAGICK_PATH
+  context.after(() => {
+    for (const [key, value] of Object.entries(previous)) {
+      if (value === undefined) delete process.env[key]
+      else process.env[key] = value
+    }
+  })
+}
+
 test("media metadata reads video tags and image EXIF/GPS", async (context) => {
+  isolateToolEnvironment(context)
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "records-metadata-"))
   const binDirectory = path.join(directory, "bin")
   fs.mkdirSync(binDirectory)
@@ -176,6 +192,7 @@ test("media metadata reads video tags and image EXIF/GPS", async (context) => {
 })
 
 test("media metadata rejects missing required extractors", async (context) => {
+  isolateToolEnvironment(context)
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "records-no-tools-"))
   const previousPath = process.env.PATH
   process.env.PATH = directory

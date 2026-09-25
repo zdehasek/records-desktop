@@ -33,6 +33,7 @@ test("prefers explicit binary paths and supports a shared binary directory", asy
   fs.writeFileSync(explicit, "")
   fs.writeFileSync(probe, "")
   process.env.REC_FFMPEG_PATH = explicit
+  process.env.REC_FFPROBE_PATH = probe
   process.env.REC_FFMPEG_DIR = directory
   const { ffmpegPath, ffprobePath } = await import(`${modulePath}?configured`)
 

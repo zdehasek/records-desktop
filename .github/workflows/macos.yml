@@ -63,6 +63,8 @@ jobs:
           echo "REC_EXIFTOOL_PATH=$GITHUB_WORKSPACE/vendor/mac-${{ matrix.arch }}/exiftool/exiftool" >> "$GITHUB_ENV"
       - run: npm run check:static
       - run: npm test
+        env:
+          TMPDIR: ${{ runner.temp }}
       - run: npm run check:electron-runtime
       - run: npm run build
       - run: npm run check:bundle

@@ -26,7 +26,14 @@ export const runTransaction = (db, fn) => {
     return runSavepoint(db, fn)
   }
 
-  db.exec("BEGIN")
+  try {
+    db.exec("BEGIN")
+  } catch (err) {
+    if (/cannot start a transaction within a transaction/.test(err.message)) {
+      return runSavepoint(db, fn)
+    }
+    throw err
+  }
   try {
     const result = fn()
     db.exec("COMMIT")
